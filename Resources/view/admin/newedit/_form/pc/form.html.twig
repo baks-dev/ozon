@@ -1,0 +1,52 @@
+{% trans_default_domain 'ozon.admin' %}
+
+<div class="tab-content" id="token_tab_content">
+
+    {# ОСНОВНЫЕ НАСТРОЙКИ #}
+    <div class="tab-pane fade show active" id="tab_token" role="tabpanel">
+
+        {# Если администратор ресурса  #}
+        {% if is_granted('ROLE_ADMIN') and form.profile is defined %}
+            {{ form_row(form.profile, { label: 'Профиль пользователя', placeholder: 'Выберите профиль из списка...' }) }}
+        {% endif %}
+
+        {{ form_row(form.client, { label: 'Идентификатор клиента' }) }}
+
+        {{ form_row(form.token, { label: 'Токен авторизации' }) }}
+
+        {% if form.client.vars.data %}
+            <div class="alert alert-warning" role="alert">
+                В целях безопастности токен зашифрован и не отображается в форме. Оставьте поле пустым, если обновлениее указанного ранее токена не требуется!
+            </div>
+        {% endif %}
+
+        <div class="d-flex gap-3">
+            {{ form_row(form.percent, { label: 'Торговая наценка' }) }}
+        </div>
+
+        <div class="flex-fill d-flex justify-content-around pb-3 radio-buttons gap-3" data-buttons="true">
+
+            <label class="btn p-3 border-dotted rounded-3 w-100 {{ form.active.vars.data ? 'active' }}">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                    <span class="h5">
+                        <div class="form-check d-flex align-items-center">
+                            {{ form_widget(form.active, { label: false }) }}
+                            <span>
+                                Активный токен
+                            </span>
+                        </div>
+                    </span>
+                    </div>
+                </div>
+            </label>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+

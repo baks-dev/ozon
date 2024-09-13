@@ -1,0 +1,23 @@
+<div class="d-flex justify-content-between align-items-end gap-3 mb-3">
+    <button type="button"
+            class="btn btn-outline-danger border-0 del-item"
+            data-delete="item_{{ form.access.vars.prototype.vars.id }}"
+    >
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25"
+                                     fill="none">
+                                    <rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1"
+                                          transform="rotate(-45 7.05025 15.5356)"
+                                          fill="currentColor"></rect>
+                                    <rect x="8.46447" y="7.05029"
+                                          width="12" height="2" rx="1"
+                                          transform="rotate(45 8.46447 7.05029)"
+                                          fill="currentColor">
+                                    </rect>
+                                </svg>
+                            </span>
+    </button>
+
+    {# Профиль пользователя #}
+    {{ form_widget(form.access.vars.prototype.profile, { label : false, placeholder : 'Выберите профиль из списка...', attr: { class: 'mb-0' }  } ) }}
+</div>
