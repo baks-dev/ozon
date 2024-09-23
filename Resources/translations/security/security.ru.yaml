@@ -1,0 +1,25 @@
+# Роль
+
+ROLE_OZON:
+  header: 'Ozon'
+  name: 'Токены авторизации Ozon'
+  desc: 'Токены авторизации Ozon'
+
+# Правила
+
+ROLE_OZON_INDEX:
+  name: 'Просмотр'
+  desc: ''
+
+ROLE_OZON_NEW:
+  name: 'Добавить'
+  desc: ''
+
+ROLE_OZON_EDIT:
+  name: 'Редактировать'
+  desc: ''
+
+ROLE_OZON_DELETE:
+  name: 'Удалить'
+  desc: ''
+

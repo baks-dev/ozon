@@ -1,0 +1,23 @@
+# Role
+
+ROLE_OZON:
+  header: 'Ozon'
+  name: 'Authorization Tokens'
+  desc: 'Ozon auth tokens'
+
+# Rules
+ROLE_OZON_INDEX:
+  name: 'View'
+  desc: ''
+
+ROLE_OZON_NEW:
+  name: 'Add'
+  desc: ''
+
+ROLE_OZON_EDIT:
+  name: 'Edit'
+  desc: ''
+
+ROLE_OZON_DELETE:
+  name: 'Delete'
+  desc: ''

@@ -1,0 +1,26 @@
+page:
+  index: 'Ozon auth tokens'
+  new: 'Add Ozon auth tokens'
+  edit: 'Edit Ozon auth tokens'
+  delete: 'Delete Ozon auth tokens'
+
+breadcrumb:
+  index: 'Authorization Tokens'
+  new: 'Add authorization tokens'
+  edit: 'Edit authorization tokens'
+  delete: 'Delete authorization tokens'
+
+success:
+  new: 'Ozon auth token successfully added'
+  edit: 'Ozon auth token updated successfully'
+  delete: 'Ozon auth token deleted successfully'
+  restore: 'Ozon auth token successfully restored'
+
+danger:
+  new: '%s: Error adding Ozon auth token'
+  edit: '%s: Error refreshing Ozon auth token'
+  delete: '%s: Error refreshing Ozon auth token'
+  restore: '%s: Error refreshing Ozon auth token'
+form:
+  delete:
+    h4: 'Are you sure you want to delete the tokens?'

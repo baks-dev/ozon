@@ -1,0 +1,13 @@
+{# ---- ШАБЛОН ------------------------------------------------------------ #}
+{% extends Template('/admin/base.html.twig') %}
+
+{# ---- КОНТЕНТ-БЛОК ------------------------------------------------------------ #}
+{% block content %}
+    {{ include(_self|replace({ "template.html.twig": baks_settings.device~"/content.html.twig" })) }}
+{% endblock %}
+
+
+{% block javascript %}
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/js/radio.input.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/ozon/script.min.js?v={{ version }}" class="lazy"></script>
+{% endblock %}
