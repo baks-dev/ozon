@@ -57,9 +57,9 @@ class OzonTokenEditTest extends KernelTestCase
 
 
         self::assertEquals('ozon_token', $OzonTokenDTO->getToken());
-        self::assertEquals('ozon_client_id', $OzonTokenDTO->getClient());
+        self::assertEquals('1234567890', $OzonTokenDTO->getClient());
         $OzonTokenDTO->setToken('ozon_token_edit');
-        $OzonTokenDTO->setClient('change_ozon_client_id');
+        $OzonTokenDTO->setClient('987654321');
 
 
         self::assertTrue($OzonTokenDTO->getActive());

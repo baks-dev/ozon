@@ -12,31 +12,18 @@ use BaksDev\Ozon\Messenger\OzonTokenMessage;
 final class OzonTokenHandler extends AbstractHandler
 {
     /** @see Ozon */
-    public function handle(
-        OzonTokenDTO $command
-    ): string|OzonToken {
-
-        /** Валидация DTO  */
-        $this->validatorCollection->add($command);
-        $this->main = new OzonToken($command->getProfile());
-        $this->event = new OzonTokenEvent();
-
-        try
-        {
-            $command->getEvent() ? $this->preUpdate($command) : $this->prePersist($command);
-        }
-        catch (\DomainException $errorUniqid)
-        {
-            return $errorUniqid->getMessage();
-        }
+    public function handle(OzonTokenDTO $command): string|OzonToken
+    {
+        $this->setCommand($command);
+        $this->preEventPersistOrUpdate(new OzonToken($command->getProfile()), OzonTokenEvent::class);
 
         /** Валидация всех объектов */
-        if ($this->validatorCollection->isInvalid())
+        if($this->validatorCollection->isInvalid())
         {
             return $this->validatorCollection->getErrorUniqid();
         }
 
-        $this->entityManager->flush();
+        $this->flush();
 
         /* Отправляем сообщение в шину */
         $this->messageDispatch->dispatch(

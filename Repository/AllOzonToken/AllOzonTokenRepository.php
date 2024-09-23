@@ -28,8 +28,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
     public function __construct(
         private readonly DBALQueryBuilder $DBALQueryBuilder,
         private readonly PaginatorInterface $paginator,
-    ) {
-    }
+    ) {}
 
     public function search(SearchDTO $search): self
     {
@@ -59,7 +58,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
         $qb->addSelect('token.event');
         $qb->from(OzonToken::class, 'token');
 
-        /** Eсли не админ - только токен профиля */
+        /** Если не админ - только токен профиля */
         if($this->profile)
         {
             $qb->where('token.id = :profile')
@@ -82,7 +81,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
             ->addSelect('users_profile.event as users_profile_event')
             ->leftJoin(
                 'token',
-                UserProfile::TABLE,
+                UserProfile::class,
                 'users_profile',
                 'users_profile.id = token.id'
             );
@@ -93,7 +92,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
             ->addSelect('users_profile_info.status as users_profile_status')
             ->leftJoin(
                 'token',
-                UserProfileInfo::TABLE,
+                UserProfileInfo::class,
                 'users_profile_info',
                 'users_profile_info.profile = token.id'
             );
@@ -101,7 +100,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
         // Event
         $qb->leftJoin(
             'users_profile',
-            UserProfileEvent::TABLE,
+            UserProfileEvent::class,
             'users_profile_event',
             'users_profile_event.id = users_profile.event'
         );
@@ -112,14 +111,19 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
 
         $qb->leftJoin(
             'users_profile_event',
-            UserProfilePersonal::TABLE,
+            UserProfilePersonal::class,
             'users_profile_personal',
             'users_profile_personal.event = users_profile_event.id'
         );
 
         // Avatar
 
-        $qb->addSelect("CASE WHEN users_profile_avatar.name IS NOT NULL THEN CONCAT ( '/upload/".$qb->table(UserProfileAvatar::class)."' , '/', users_profile_avatar.name) ELSE NULL END AS users_profile_avatar");
+        $qb->addSelect("CASE 
+            WHEN users_profile_avatar.name IS NOT NULL 
+            THEN CONCAT ( '/upload/".$qb->table(UserProfileAvatar::class)."' , '/', users_profile_avatar.name) 
+            ELSE NULL 
+        END AS users_profile_avatar");
+
         $qb->addSelect("users_profile_avatar.ext AS users_profile_avatar_ext");
         $qb->addSelect('users_profile_avatar.cdn AS users_profile_avatar_cdn');
 

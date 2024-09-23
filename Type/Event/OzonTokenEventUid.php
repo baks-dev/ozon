@@ -25,10 +25,10 @@ final class OzonTokenEventUid extends Uid
 
     public function __construct(
         AbstractUid|string|null $value = null,
-        mixed                   $attr = null,
-        mixed                   $option = null,
-        mixed                   $property = null,
-        mixed                   $characteristic = null,
+        mixed $attr = null,
+        mixed $option = null,
+        mixed $property = null,
+        mixed $characteristic = null,
     ) {
         parent::__construct($value);
 

@@ -60,7 +60,7 @@ class OzonTokenDeleteTest extends KernelTestCase
         $OzonTokenEvent->getDto($OzonTokenDTO);
 
         self::assertEquals('ozon_token_edit', $OzonTokenDTO->getToken());
-        self::assertEquals('change_ozon_client_id', $OzonTokenDTO->getClient());
+        self::assertEquals('987654321', $OzonTokenDTO->getClient());
         self::assertFalse($OzonTokenDTO->getActive());
         self::assertFalse($OzonTokenDTO->getProfile()->equals(UserProfileUid::TEST)); //($UserProfileUid::TEST, $OzonTokenDTO->getProfile());
 

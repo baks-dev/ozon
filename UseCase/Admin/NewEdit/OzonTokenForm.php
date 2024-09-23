@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\UseCase\Admin\NewEdit;
 
+use BaksDev\DeliveryTransport\Type\ProductParameter\Weight\Kilogram\Kilogram;
 use BaksDev\Users\Profile\UserProfile\Repository\UserProfileChoice\UserProfileChoiceInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -20,8 +22,7 @@ final class OzonTokenForm extends AbstractType
 {
     public function __construct(
         private readonly UserProfileChoiceInterface $profileChoice
-    ) {
-    }
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -51,6 +52,18 @@ final class OzonTokenForm extends AbstractType
         $builder->add('active', CheckboxType::class, ['required' => false]);
 
         $builder->add('client', NumberType::class, ['required' => false]);
+
+        $builder->get('client')->addModelTransformer(
+            new CallbackTransformer(
+                function ($client) {
+                    return (int) $client;
+                },
+                function ($client) {
+                    return $client ? (string) $client : null;
+                }
+            )
+        );
+
 
         $builder->add('token', TextareaType::class, ['required' => false]);
 

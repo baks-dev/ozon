@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('baks.security.voter')]
 final class VoterDelete implements VoterInterface
 {
-    public const VOTER = 'DELETE';
+    public const string VOTER = 'DELETE';
 
     /** Метод возвращает правило, конкатенируя ROLE + VOTER */
     public static function getVoter(): string

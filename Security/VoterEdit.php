@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('baks.security.voter')]
 final class VoterEdit implements VoterInterface
 {
-    public const VOTER = 'EDIT';
+    public const string VOTER = 'EDIT';
 
     /** Метод возвращает правило, конкатенируя ROLE + VOTER */
     public static function getVoter(): string

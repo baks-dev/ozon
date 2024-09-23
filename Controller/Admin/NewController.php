@@ -53,8 +53,6 @@ final class NewController extends AbstractController
             return $handle instanceof OzonToken ? $this->redirectToRoute('ozon:admin.index') : $this->redirectToReferer();
         }
 
-
-
         return $this->render(['form' => $form->createView()]);
     }
 }

@@ -27,6 +27,7 @@ final class EditController extends AbstractController
         #[MapEntity] OzonTokenEvent $OzonEvent,
         OzonTokenHandler $OzonHandler,
     ): Response {
+
         $OzonDTO = new OzonTokenDTO();
         $OzonEvent->getDto($OzonDTO);
 

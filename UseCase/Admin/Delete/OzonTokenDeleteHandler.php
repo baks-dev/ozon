@@ -12,32 +12,19 @@ use BaksDev\Ozon\Messenger\OzonTokenMessage;
 final class OzonTokenDeleteHandler extends AbstractHandler
 {
     /** @see Ozon */
-    public function handle(
-        OzonTokenDeleteDTO $command
-    ): string|OzonToken {
+    public function handle(OzonTokenDeleteDTO $command): string|OzonToken
+    {
+        $this->setCommand($command);
 
-        /** Валидация DTO  */
-        $this->validatorCollection->add($command);
-
-        $this->main = new OzonToken($command->getProfile());
-        $this->event = new OzonTokenEvent();
-
-        try
-        {
-            $this->preRemove($command);
-        }
-        catch (\DomainException $errorUniqid)
-        {
-            return $errorUniqid->getMessage();
-        }
+        $this->preEventRemove(new OzonToken($command->getProfile()), OzonTokenEvent::class);
 
         /** Валидация всех объектов */
-        if ($this->validatorCollection->isInvalid())
+        if($this->validatorCollection->isInvalid())
         {
             return $this->validatorCollection->getErrorUniqid();
         }
 
-        $this->entityManager->flush();
+        $this->flush();
 
         /* Отправляем сообщение в шину */
         $this->messageDispatch->dispatch(

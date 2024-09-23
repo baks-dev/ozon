@@ -6,6 +6,7 @@ namespace BaksDev\Ozon\Security;
 
 use BaksDev\Menu\Admin\Command\Upgrade\MenuAdminInterface;
 use BaksDev\Menu\Admin\Type\SectionGroup\Group\Collection\MenuAdminSectionGroupCollectionInterface;
+use BaksDev\Menu\Admin\Type\SectionGroup\Group\MenuGroupSettings;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
@@ -29,11 +30,7 @@ final class Header implements MenuAdminInterface
      */
     public function getGroupMenu(): MenuAdminSectionGroupCollectionInterface|bool
     {
-        /**
-         * @example
-         * <code> return new MenuGroupSettings(); </code>
-         */
-        return false;
+        return new MenuGroupSettings();
     }
 
     /**

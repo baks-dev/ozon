@@ -34,25 +34,23 @@ use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\RetryableHttpClient;
+use Symfony\Contracts\Cache\CacheInterface;
 
 abstract class Ozon
 {
     protected LoggerInterface $logger;
 
-    protected ?UserProfileUid $profile = null;
+    protected UserProfileUid|false $profile = false;
 
-    private ?OzonAuthorizationToken $AuthorizationToken = null;
-
-    private OzonTokenByProfileInterface $TokenByProfile;
+    private OzonAuthorizationToken|false $AuthorizationToken;
 
     private array $headers;
 
     public function __construct(
-        OzonTokenByProfileInterface $TokenByProfile,
+        private readonly OzonTokenByProfileInterface $TokenByProfile,
+        private readonly AppCacheInterface $cache,
         LoggerInterface $OzonLogger,
-        private readonly AppCacheInterface $cache
     ) {
-        $this->TokenByProfile = $TokenByProfile;
         $this->logger = $OzonLogger;
     }
 
@@ -71,17 +69,21 @@ abstract class Ozon
         return $this;
     }
 
-    public function TokenHttpClient(OzonAuthorizationToken $AuthorizationToken = null): RetryableHttpClient
+    public function TokenHttpClient(OzonAuthorizationToken|false $AuthorizationToken = false): RetryableHttpClient
     {
-        if($AuthorizationToken !== null)
+        /**
+         * @note OzonAuthorizationToken $AuthorizationToken передается в тестовом окружении
+         * Если передан тестовый AuthorizationToken - присваиваем тестовый профиль
+         */
+        if($AuthorizationToken !== false)
         {
             $this->AuthorizationToken = $AuthorizationToken;
             $this->profile = $AuthorizationToken->getProfile();
         }
 
-        if($this->AuthorizationToken === null)
+        if($this->AuthorizationToken === false)
         {
-            if(!$this->profile)
+            if($this->profile === false)
             {
                 $this->logger->critical('Не указан идентификатор профиля пользователя через вызов метода profile', [__FILE__.':'.__LINE__]);
 
@@ -92,13 +94,11 @@ abstract class Ozon
 
             $this->AuthorizationToken = $this->TokenByProfile->getToken($this->profile);
 
-            if(!$this->AuthorizationToken)
+            if($this->AuthorizationToken === false)
             {
                 throw new DomainException(sprintf('Токен авторизации Ozon не найден: %s', $this->profile));
             }
         }
-
-        //$this->headers = ['Authorization' => 'Bearer '.$this->AuthorizationToken->getToken()];
 
         $this->headers = [
             'Client-Id' => $this->getClient(),
@@ -108,7 +108,7 @@ abstract class Ozon
         return new RetryableHttpClient(
             HttpClient::create(['headers' => $this->headers])
                 ->withOptions([
-                    'base_uri' =>  'https://api-seller.ozon.ru',
+                    'base_uri' => 'https://api-seller.ozon.ru',
                     'verify_host' => false
                 ])
         );
@@ -117,7 +117,7 @@ abstract class Ozon
     /**
      * Profile
      */
-    protected function getProfile(): ?UserProfileUid
+    protected function getProfile(): UserProfileUid|false
     {
         return $this->profile;
     }
@@ -132,6 +132,9 @@ abstract class Ozon
         return $this->AuthorizationToken->getClient();
     }
 
+    /**
+     * Метод рассчитывает размер торговой наценки от стоимости товара
+     */
     public function getPercent(float|int $price): int|float
     {
         $percent = $this->AuthorizationToken->getPercent();
@@ -144,24 +147,8 @@ abstract class Ozon
         return ($price / 100 * $percent);
     }
 
-    public function getCache(): AppCacheInterface
+    public function getCacheInit(string $namespace): CacheInterface
     {
-        return $this->cache;
+        return $this->cache->init($namespace);
     }
-
-
-    protected function getCurlHeader(): string
-    {
-        $this->headers['accept'] = 'application/json';
-        $this->headers['Content-Type'] = 'application/json; charset=utf-8';
-
-        return '-H "'.implode('" -H "', array_map(
-            function ($key, $value) {
-                return "$key: $value";
-            },
-            array_keys($this->headers),
-            $this->headers
-        )).'"';
-    }
-
 }

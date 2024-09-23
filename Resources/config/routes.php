@@ -21,16 +21,19 @@
  *  THE SOFTWARE.
  */
 
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
-
 use BaksDev\Ozon\BaksDevOzonBundle;
-use Symfony\Config\TwigConfig;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
-return static function (TwigConfig $twig) {
+return function (RoutingConfigurator $routes) {
 
-    $twig->path(
-        BaksDevOzonBundle::PATH.'Resources/view',
-        'ozon'
-    );
+    $MODULE = BaksDevOzonBundle::PATH;
 
+    $routes->import(
+        $MODULE.'Controller',
+        'attribute',
+        false,
+        $MODULE.implode(DIRECTORY_SEPARATOR, ['Controller', '**', '*Test.php'])
+    )
+        ->prefix(\BaksDev\Core\Type\Locale\Locale::routes())
+        ->namePrefix('ozon:');
 };

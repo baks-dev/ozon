@@ -24,11 +24,21 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use BaksDev\Ozon\BaksDevOzonBundle;
-use Symfony\Config\FrameworkConfig;
 
-return static function (FrameworkConfig $config) {
+return static function (ContainerConfigurator $configurator) {
 
-    $config
-        ->translator()
-        ->paths([BaksDevOzonBundle::PATH.'Resources/translations/']);
+    $services = $configurator->services()
+        ->defaults()
+        ->autowire()
+        ->autoconfigure();
+
+    $NAMESPACE = BaksDevOzonBundle::NAMESPACE;
+    $PATH = BaksDevOzonBundle::PATH;
+
+    $services->load($NAMESPACE, $PATH)
+        ->exclude([
+            $PATH.'{Entity,Resources,Type}',
+            $PATH.'**'.DIRECTORY_SEPARATOR.'*Message.php',
+            $PATH.'**'.DIRECTORY_SEPARATOR.'*DTO.php',
+        ]);
 };

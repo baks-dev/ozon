@@ -37,9 +37,6 @@ class OzonTokenEvent extends EntityEvent
     #[ORM\Column(type: UserProfileUid::TYPE)]
     private UserProfileUid $profile;
 
-    /** One To One */
-    //#[ORM\OneToOne(mappedBy: 'event', targetEntity: OzonTokenLogo::class, cascade: ['all'])]
-    //private ?OzonTokenOne $one = null;
 
     /**
      * Модификатор
@@ -75,12 +72,6 @@ class OzonTokenEvent extends EntityEvent
     #[Assert\Type('boolean')]
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $active;
-
-    /**
-     * Переводы
-     */
-    //#[ORM\OneToMany(mappedBy: 'event', targetEntity: OzonTokenTrans::class, cascade: ['all'])]
-    //private Collection $translate;
 
 
     public function __construct()

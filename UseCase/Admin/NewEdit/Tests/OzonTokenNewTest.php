@@ -73,10 +73,10 @@ class OzonTokenNewTest extends KernelTestCase
         $OzonTokenDTO = new OzonTokenDTO();
 
         $OzonTokenDTO->setToken('ozon_token');
-        $OzonTokenDTO->setClient('ozon_client_id');
+        $OzonTokenDTO->setClient('1234567890');
 
         self::assertEquals('ozon_token', $OzonTokenDTO->getToken());
-        self::assertEquals('ozon_client_id', $OzonTokenDTO->getClient());
+        self::assertEquals('1234567890', $OzonTokenDTO->getClient());
 
 
         $OzonTokenDTO->setActive(true);

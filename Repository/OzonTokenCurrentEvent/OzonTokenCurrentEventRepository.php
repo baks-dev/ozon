@@ -9,12 +9,9 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Ozon\Entity\Event\OzonTokenEvent;
 use BaksDev\Ozon\Entity\OzonToken;
 
-final class OzonTokenCurrentEventRepository implements OzonTokenCurrentEventInterface
+final readonly class OzonTokenCurrentEventRepository implements OzonTokenCurrentEventInterface
 {
-    public function __construct(
-        private readonly ORMQueryBuilder $ORMQueryBuilder
-    ) {
-    }
+    public function __construct(private ORMQueryBuilder $ORMQueryBuilder) {}
 
     /** Метод возвращает активное событие токена профиля */
     public function findByProfile(UserProfileUid|string $profile): OzonTokenEvent|false
@@ -26,12 +23,10 @@ final class OzonTokenCurrentEventRepository implements OzonTokenCurrentEventInte
 
         $orm = $this->ORMQueryBuilder->createQueryBuilder(self::class);
 
-
         $orm
             ->from(OzonToken::class, 'main')
             ->where('main.id = :profile')
             ->setParameter('profile', $profile, UserProfileUid::TYPE);
-
 
         $orm
             ->select('event')

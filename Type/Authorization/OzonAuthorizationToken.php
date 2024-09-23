@@ -54,8 +54,9 @@ final class OzonAuthorizationToken
         UserProfileUid|string $profile,
         string $token,
         string $client,
-        int|string $percent = 0
+        int|string|null $percent = 0
     ) {
+
         if(is_string($profile))
         {
             $profile = new UserProfileUid($profile);
@@ -64,6 +65,12 @@ final class OzonAuthorizationToken
         $this->profile = $profile;
         $this->token = $token;
         $this->client = $client;
+
+        if(is_null($percent))
+        {
+            $percent = 0;
+        }
+
         $this->percent = (int) $percent;
     }
 

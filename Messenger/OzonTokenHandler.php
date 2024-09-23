@@ -12,10 +12,7 @@ final class OzonTokenHandler
 {
     public function __construct(
         private readonly OzonTokenCurrentEventInterface $currentEvent,
-    ) {
-    }
+    ) {}
 
-    public function __invoke(OzonTokenMessage $message): void
-    {
-    }
+    public function __invoke(OzonTokenMessage $message): void {}
 }

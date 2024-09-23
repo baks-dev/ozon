@@ -13,16 +13,14 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\UserProfileStatus\Status\UserProfileStatusActive;
 use BaksDev\Users\Profile\UserProfile\Type\UserProfileStatus\UserProfileStatus;
 
-final class OzonTokenByProfileRepository implements OzonTokenByProfileInterface
+final readonly class OzonTokenByProfileRepository implements OzonTokenByProfileInterface
 {
-    public function __construct(private DBALQueryBuilder $DBALQueryBuilder)
-    {
-    }
+    public function __construct(private DBALQueryBuilder $DBALQueryBuilder) {}
 
     /**
      * Метод возвращает токен авторизации профиля
      */
-    public function getToken(UserProfileUid|string $profile): ?OzonAuthorizationToken
+    public function getToken(UserProfileUid|string $profile): OzonAuthorizationToken|false
     {
         if(is_string($profile))
         {
@@ -60,6 +58,7 @@ final class OzonTokenByProfileRepository implements OzonTokenByProfileInterface
         $qb->select('token.id AS profile');
         $qb->addSelect('event.token AS token');
         $qb->addSelect('event.client AS client');
+        $qb->addSelect('event.percent AS percent');
 
         /* Кешируем результат ORM */
         return $qb

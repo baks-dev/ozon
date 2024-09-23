@@ -7,5 +7,5 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 
 interface OzonTokenByProfileInterface
 {
-    public function getToken(UserProfileUid|string $profile): ?OzonAuthorizationToken;
+    public function getToken(UserProfileUid|string $profile): OzonAuthorizationToken|false;
 }
