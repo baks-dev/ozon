@@ -73,6 +73,12 @@ class OzonTokenEvent extends EntityEvent
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $active;
 
+    /**
+     * Переводы
+     */
+    //#[ORM\OneToMany(mappedBy: 'event', targetEntity: OzonTokenTrans::class, cascade: ['all'])]
+    //private Collection $translate;
+
 
     public function __construct()
     {
