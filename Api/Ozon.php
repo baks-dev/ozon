@@ -42,7 +42,7 @@ abstract class Ozon
 
     protected UserProfileUid|false $profile = false;
 
-    private OzonAuthorizationToken|false $AuthorizationToken;
+    private OzonAuthorizationToken|false $AuthorizationToken = false;
 
     private array $headers;
 
@@ -79,6 +79,12 @@ abstract class Ozon
         {
             $this->AuthorizationToken = $AuthorizationToken;
             $this->profile = $AuthorizationToken->getProfile();
+            $this->TokenByProfile->setAuthorization($AuthorizationToken);
+        }
+
+        if($this->AuthorizationToken === false)
+        {
+            $this->AuthorizationToken = $this->TokenByProfile->getAuthorization();
         }
 
         if($this->AuthorizationToken === false)

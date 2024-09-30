@@ -22,7 +22,8 @@ final class OzonTokenForm extends AbstractType
 {
     public function __construct(
         private readonly UserProfileChoiceInterface $profileChoice
-    ) {}
+    ) {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
