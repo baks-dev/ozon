@@ -13,7 +13,8 @@ final class OzonTokenMessage
         private readonly UserProfileUid $id,
         private readonly OzonTokenEventUid $event,
         private readonly ?OzonTokenEventUid $last = null
-    ) {}
+    ) {
+    }
 
     /**
      * Идентификатор

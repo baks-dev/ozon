@@ -13,9 +13,13 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\UserProfileStatus\Status\UserProfileStatusActive;
 use BaksDev\Users\Profile\UserProfile\Type\UserProfileStatus\UserProfileStatus;
 
-final readonly class OzonTokenByProfileRepository implements OzonTokenByProfileInterface
+final class OzonTokenByProfileRepository implements OzonTokenByProfileInterface
 {
-    public function __construct(private DBALQueryBuilder $DBALQueryBuilder) {}
+    private OzonAuthorizationToken|false $authorization = false;
+
+    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder)
+    {
+    }
 
     /**
      * Метод возвращает токен авторизации профиля
@@ -61,9 +65,20 @@ final readonly class OzonTokenByProfileRepository implements OzonTokenByProfileI
         $qb->addSelect('event.percent AS percent');
 
         /* Кешируем результат ORM */
-        return $qb
+        return $this->authorization = $qb
             ->enableCache('ozon', 86400)
             ->fetchHydrate(OzonAuthorizationToken::class);
 
+    }
+
+    public function setAuthorization(OzonAuthorizationToken $authorization): self
+    {
+        $this->authorization = $authorization;
+        return $this;
+    }
+
+    public function getAuthorization(): false|OzonAuthorizationToken
+    {
+        return $this->authorization;
     }
 }

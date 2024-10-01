@@ -11,7 +11,9 @@ use BaksDev\Ozon\Entity\OzonToken;
 
 final readonly class OzonTokenCurrentEventRepository implements OzonTokenCurrentEventInterface
 {
-    public function __construct(private ORMQueryBuilder $ORMQueryBuilder) {}
+    public function __construct(private ORMQueryBuilder $ORMQueryBuilder)
+    {
+    }
 
     /** Метод возвращает активное событие токена профиля */
     public function findByProfile(UserProfileUid|string $profile): OzonTokenEvent|false
