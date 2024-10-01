@@ -32,6 +32,7 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use DomainException;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\RetryableHttpClient;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -47,6 +48,7 @@ abstract class Ozon
     private array $headers;
 
     public function __construct(
+        #[Autowire(env: 'APP_ENV')] private readonly string $environment,
         private readonly OzonTokenByProfileInterface $TokenByProfile,
         private readonly AppCacheInterface $cache,
         LoggerInterface $OzonLogger,
@@ -156,5 +158,15 @@ abstract class Ozon
     public function getCacheInit(string $namespace): CacheInterface
     {
         return $this->cache->init($namespace);
+    }
+
+    /**
+     * Метод проверяет что окружение является PROD,
+     * тем самым позволяет выполнять операции запроса на сторонний сервис
+     * ТОЛЬКО в PROD окружении
+     */
+    protected function isExecuteEnvironment(): bool
+    {
+        return $this->environment === 'prod';
     }
 }
