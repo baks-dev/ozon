@@ -28,7 +28,8 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
     public function __construct(
         private readonly DBALQueryBuilder $DBALQueryBuilder,
         private readonly PaginatorInterface $paginator,
-    ) {}
+    ) {
+    }
 
     public function search(SearchDTO $search): self
     {
