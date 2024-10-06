@@ -40,9 +40,7 @@ final class AllProfileOzonTokenRepository implements AllProfileOzonTokenInterfac
 {
     private bool $active = false;
 
-    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder)
-    {
-    }
+    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
 
     public function onlyActiveToken(): self
     {

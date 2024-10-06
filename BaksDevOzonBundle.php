@@ -27,6 +27,7 @@ namespace BaksDev\Ozon;
 
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
+/** Индекс сортировки 450 */
 class BaksDevOzonBundle extends AbstractBundle
 {
     public const string NAMESPACE = __NAMESPACE__.'\\';
