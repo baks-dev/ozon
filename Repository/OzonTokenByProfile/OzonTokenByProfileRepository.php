@@ -62,6 +62,7 @@ final class OzonTokenByProfileRepository implements OzonTokenByProfileInterface
         $qb->select('token.id AS profile');
         $qb->addSelect('event.token AS token');
         $qb->addSelect('event.client AS client');
+        $qb->addSelect('event.warehouse AS warehouse');
         $qb->addSelect('event.percent AS percent');
 
         /* Кешируем результат ORM */

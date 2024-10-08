@@ -48,7 +48,7 @@ class OzonTokenEvent extends EntityEvent
      * Id Клиента
      */
     #[Assert\NotBlank]
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::STRING)]
     private string $client;
 
     /**
@@ -57,6 +57,15 @@ class OzonTokenEvent extends EntityEvent
     #[Assert\NotBlank]
     #[ORM\Column(type: Types::TEXT)]
     private string $token;
+
+
+    /**
+     * Id склада
+     */
+    #[Assert\NotBlank]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private string $warehouse;
+
 
     /**
      * Торговая наценка
@@ -98,7 +107,7 @@ class OzonTokenEvent extends EntityEvent
 
     public function __toString(): string
     {
-        return (string)$this->id;
+        return (string) $this->id;
     }
 
     public function getId(): OzonTokenEventUid
@@ -121,7 +130,7 @@ class OzonTokenEvent extends EntityEvent
 
     public function getDto($dto): mixed
     {
-        if ($dto instanceof OzonTokenEventInterface)
+        if($dto instanceof OzonTokenEventInterface)
         {
             return parent::getDto($dto);
         }
@@ -131,7 +140,7 @@ class OzonTokenEvent extends EntityEvent
 
     public function setEntity($dto): mixed
     {
-        if ($dto instanceof OzonTokenEventInterface)
+        if($dto instanceof OzonTokenEventInterface)
         {
             return parent::setEntity($dto);
         }

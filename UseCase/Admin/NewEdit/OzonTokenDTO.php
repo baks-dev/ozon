@@ -18,7 +18,6 @@ final class OzonTokenDTO implements OzonTokenEventInterface
     #[Assert\Uuid]
     private ?OzonTokenEventUid $id = null;
 
-
     /**
      * Токен
      */
@@ -29,8 +28,13 @@ final class OzonTokenDTO implements OzonTokenEventInterface
      * Id Клиента
      */
     #[Assert\NotBlank]
-    #[Assert\Type('string')]
     private string $client;
+
+    /**
+     * Id Клиента
+     */
+    #[Assert\NotBlank]
+    private string $warehouse;
 
     /**
      * Профиль
@@ -90,6 +94,20 @@ final class OzonTokenDTO implements OzonTokenEventInterface
     public function setClient(string $client): void
     {
         $this->client = $client;
+    }
+
+    /**
+     * Warehouse
+     */
+    public function getWarehouse(): string
+    {
+        return $this->warehouse;
+    }
+
+    public function setWarehouse(string $warehouse): self
+    {
+        $this->warehouse = $warehouse;
+        return $this;
     }
 
     public function getActive(): bool

@@ -140,19 +140,14 @@ abstract class Ozon
         return $this->AuthorizationToken->getClient();
     }
 
-    /**
-     * Метод рассчитывает размер торговой наценки от стоимости товара
-     */
-    public function getPercent(float|int $price): int|float
+    protected function getWarehouse(): string
     {
-        $percent = $this->AuthorizationToken->getPercent();
+        return $this->AuthorizationToken->getWarehouse();
+    }
 
-        if($percent === 0)
-        {
-            return 0;
-        }
-
-        return ($price / 100 * $percent);
+    protected function getPercent(): int
+    {
+        return $this->AuthorizationToken->getPercent();
     }
 
     public function getCacheInit(string $namespace): CacheInterface

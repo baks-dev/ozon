@@ -45,6 +45,12 @@ final class OzonAuthorizationToken
     private readonly string $client;
 
     /**
+     * Id склада
+     */
+    private readonly string $warehouse;
+
+
+    /**
      * Торговая наценка
      */
     private int $percent;
@@ -54,6 +60,7 @@ final class OzonAuthorizationToken
         UserProfileUid|string $profile,
         string $token,
         string $client,
+        string $warehouse,
         int|string|null $percent = 0
     ) {
 
@@ -65,6 +72,7 @@ final class OzonAuthorizationToken
         $this->profile = $profile;
         $this->token = $token;
         $this->client = $client;
+        $this->warehouse = $warehouse;
 
         if(is_null($percent))
         {
@@ -89,6 +97,14 @@ final class OzonAuthorizationToken
     public function getClient(): string
     {
         return $this->client;
+    }
+
+    /**
+     * Warehouse
+     */
+    public function getWarehouse(): string
+    {
+        return $this->warehouse;
     }
 
     public function getPercent(): int

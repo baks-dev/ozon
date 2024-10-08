@@ -22,8 +22,7 @@ final class OzonTokenForm extends AbstractType
 {
     public function __construct(
         private readonly UserProfileChoiceInterface $profileChoice
-    ) {
-    }
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -55,6 +54,19 @@ final class OzonTokenForm extends AbstractType
         $builder->add('client', NumberType::class, ['required' => false]);
 
         $builder->get('client')->addModelTransformer(
+            new CallbackTransformer(
+                function ($client) {
+                    return (int) $client;
+                },
+                function ($client) {
+                    return $client ? (string) $client : null;
+                }
+            )
+        );
+
+        $builder->add('warehouse', NumberType::class, ['required' => false]);
+
+        $builder->get('warehouse')->addModelTransformer(
             new CallbackTransformer(
                 function ($client) {
                     return (int) $client;
