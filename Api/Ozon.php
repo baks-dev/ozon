@@ -140,9 +140,9 @@ abstract class Ozon
         return $this->AuthorizationToken->getClient();
     }
 
-    protected function getWarehouse(): string
+    protected function getWarehouse(): int
     {
-        return $this->AuthorizationToken->getWarehouse();
+        return (int) $this->AuthorizationToken->getWarehouse();
     }
 
     protected function getPercent(): int
