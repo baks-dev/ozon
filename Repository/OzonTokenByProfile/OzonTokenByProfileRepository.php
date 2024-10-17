@@ -17,9 +17,7 @@ final class OzonTokenByProfileRepository implements OzonTokenByProfileInterface
 {
     private OzonAuthorizationToken|false $authorization = false;
 
-    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder)
-    {
-    }
+    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
 
     /**
      * Метод возвращает токен авторизации профиля

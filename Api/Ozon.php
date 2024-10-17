@@ -56,7 +56,6 @@ abstract class Ozon
         $this->logger = $OzonLogger;
     }
 
-
     public function profile(UserProfileUid|string $profile): self
     {
         if(is_string($profile))

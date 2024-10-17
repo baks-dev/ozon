@@ -82,6 +82,9 @@ class OzonTokenNewTest extends KernelTestCase
         $OzonTokenDTO->setActive(true);
         self::assertTrue($OzonTokenDTO->getActive());
 
+        $OzonTokenDTO->setWarehouse('123456789');
+        self::assertEquals('123456789', $OzonTokenDTO->getWarehouse());
+
         $UserProfileUid = new UserProfileUid(UserProfileUid::TEST);
         $OzonTokenDTO->setProfile($UserProfileUid);
         self::assertSame($UserProfileUid, $OzonTokenDTO->getProfile());

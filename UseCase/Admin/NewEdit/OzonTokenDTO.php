@@ -31,10 +31,17 @@ final class OzonTokenDTO implements OzonTokenEventInterface
     private string $client;
 
     /**
-     * Id Клиента
+     * Id склада
      */
     #[Assert\NotBlank]
     private string $warehouse;
+
+    /**
+     * Торговая наценка
+     */
+    #[Assert\NotBlank]
+    #[Assert\Range(min: 0, max: 100)]
+    private int $percent = 0;
 
     /**
      * Профиль
@@ -61,12 +68,6 @@ final class OzonTokenDTO implements OzonTokenEventInterface
         return $this->token;
     }
 
-    /**
-     * Торговая наценка
-     */
-    #[Assert\NotBlank]
-    #[Assert\Range(min: 0, max: 100)]
-    private int $percent = 0;
 
     public function setToken(?string $token): void
     {
