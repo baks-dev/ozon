@@ -100,7 +100,9 @@ final class AllProfileOzonTokenRepository implements AllProfileOzonTokenInterfac
         $dbal->addSelect('token.id AS value');
         $dbal->addSelect('personal.username AS attr');
 
-        return $dbal->fetchAllHydrate(UserProfileUid::class);
+        return $dbal
+            ->enableCache('ozon', '1 minutes')
+            ->fetchAllHydrate(UserProfileUid::class);
 
     }
 }
