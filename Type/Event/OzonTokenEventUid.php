@@ -10,9 +10,9 @@ use Symfony\Component\Uid\AbstractUid;
 final class OzonTokenEventUid extends Uid
 {
     /** Тестовый идентификатор */
-    public const TEST = 'ec4d4edd-f7c9-4db1-be16-fef0bd2b40f0';
+    public const string TEST = 'ec4d4edd-f7c9-4db1-be16-fef0bd2b40f0';
 
-    public const TYPE = 'ozon_token_event';
+    public const string TYPE = 'ozon_token_event';
 
     private mixed $attr;
 
