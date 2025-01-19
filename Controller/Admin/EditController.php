@@ -14,8 +14,8 @@ use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenHandler;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 #[RoleSecurity('ROLE_OZON_EDIT')]
@@ -32,7 +32,7 @@ final class EditController extends AbstractController
         $OzonEvent->getDto($OzonDTO);
 
         /** Запрещаем редактировать чужой токен */
-        if($this->getAdminFilterProfile() === null || $this->getProfileUid()?->equals($OzonEvent->getProfile()) === true)
+        if($this->isAdmin() === true || $this->getProfileUid()?->equals($OzonEvent->getProfile()) === true)
         {
             $OzonEvent->getDto($OzonDTO);
         }
@@ -54,7 +54,7 @@ final class EditController extends AbstractController
             $this->refreshTokenForm($form);
 
             /** Запрещаем редактировать чужой токен */
-            if($this->getAdminFilterProfile() && $this->getAdminFilterProfile()->equals($OzonDTO->getProfile()) === false)
+            if($this->isAdmin() === false && $this->getProfileUid()?->equals($OzonDTO->getProfile()) !== true)
             {
                 $this->addFlash('breadcrumb.edit', 'danger.edit', 'ozon.admin', '404');
                 return $this->redirectToReferer();
