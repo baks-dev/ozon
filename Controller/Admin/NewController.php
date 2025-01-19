@@ -13,8 +13,8 @@ use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenForm;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 #[RoleSecurity('ROLE_OZON_NEW')]
@@ -28,10 +28,7 @@ final class NewController extends AbstractController
 
         $OzonDTO = new OzonTokenDTO();
 
-        if($this->getAdminFilterProfile())
-        {
-            $OzonDTO->setProfile($this->getAdminFilterProfile());
-        }
+        $this->isAdmin() ?: $OzonDTO->setProfile($this->getProfileUid());
 
         // Форма
         $form = $this->createForm(OzonTokenForm::class, $OzonDTO, [
