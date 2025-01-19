@@ -68,7 +68,6 @@ final class OzonTokenDTO implements OzonTokenEventInterface
         return $this->token;
     }
 
-
     public function setToken(?string $token): void
     {
         if(!empty($token))
@@ -76,6 +75,12 @@ final class OzonTokenDTO implements OzonTokenEventInterface
             $this->token = $token;
         }
     }
+
+    public function hiddenToken(): void
+    {
+        $this->token = null;
+    }
+
 
     public function getProfile(): ?UserProfileUid
     {
@@ -121,10 +126,6 @@ final class OzonTokenDTO implements OzonTokenEventInterface
         $this->active = $active;
     }
 
-    public function hiddenToken(): void
-    {
-        $this->token = null;
-    }
 
     public function getPercent(): int
     {
