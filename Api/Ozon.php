@@ -33,14 +33,13 @@ use DomainException;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\RetryableHttpClient;
 use Symfony\Contracts\Cache\CacheInterface;
 
 abstract class Ozon
 {
-    protected LoggerInterface $logger;
-
     protected UserProfileUid|false $profile = false;
 
     private OzonAuthorizationToken|false $AuthorizationToken = false;
@@ -49,12 +48,10 @@ abstract class Ozon
 
     public function __construct(
         #[Autowire(env: 'APP_ENV')] private readonly string $environment,
+        #[Target('ozonLogger')] private readonly LoggerInterface $logger,
         private readonly OzonTokenByProfileInterface $TokenByProfile,
         private readonly AppCacheInterface $cache,
-        LoggerInterface $OzonLogger,
-    ) {
-        $this->logger = $OzonLogger;
-    }
+    ) {}
 
     public function profile(UserProfileUid|string $profile): self
     {
