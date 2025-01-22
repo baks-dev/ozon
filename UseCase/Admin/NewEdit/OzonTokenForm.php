@@ -81,7 +81,7 @@ final class OzonTokenForm extends AbstractType
         $builder->add('token', TextareaType::class, ['required' => false]);
 
         $builder->add('percent', IntegerType::class, [
-            'attr' => ['max' => 100, 'min' => 0]
+            'attr' => ['max' => 100, 'min' => -100]
         ]);
 
         /* Сохранить ******************************************************/

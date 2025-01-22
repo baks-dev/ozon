@@ -48,7 +48,7 @@ abstract class Ozon
 
     public function __construct(
         #[Autowire(env: 'APP_ENV')] private readonly string $environment,
-        #[Target('ozonLogger')] private readonly LoggerInterface $logger,
+        #[Target('ozonLogger')] protected readonly LoggerInterface $logger,
         private readonly OzonTokenByProfileInterface $TokenByProfile,
         private readonly AppCacheInterface $cache,
     ) {}

@@ -40,7 +40,7 @@ final class OzonTokenDTO implements OzonTokenEventInterface
      * Торговая наценка
      */
     #[Assert\NotBlank]
-    #[Assert\Range(min: 0, max: 100)]
+    #[Assert\Range(min: -100, max: 100)]
     private int $percent = 0;
 
     /**
