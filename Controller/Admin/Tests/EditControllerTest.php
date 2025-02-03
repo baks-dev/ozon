@@ -33,9 +33,9 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 final class EditControllerTest extends WebTestCase
 {
-    private const URL = '/admin/ozon/edit/%s';
+    private const string URL = '/admin/ozon/edit/%s';
 
-    private const ROLE = 'ROLE_OZON_EDIT';
+    private const string ROLE = 'ROLE_OZON_EDIT';
 
 
     private static ?OzonTokenEventUid $identifier = null;

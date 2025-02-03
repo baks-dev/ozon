@@ -30,9 +30,9 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 final class NewControllerTest extends WebTestCase
 {
-    private const URL = '/admin/ozon/new';
+    private const string URL = '/admin/ozon/new';
 
-    private const ROLE = 'ROLE_OZON_NEW';
+    private const string ROLE = 'ROLE_OZON_NEW';
 
     /** Доступ по роли  */
     public function testRoleSuccessful(): void

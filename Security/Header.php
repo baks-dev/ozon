@@ -20,9 +20,9 @@ final class Header implements MenuAdminInterface
         return Role::ROLE;
     }
 
-    public function getPath(): ?string
+    public function getPath(): false
     {
-        return null;
+        return false;
     }
 
     /**

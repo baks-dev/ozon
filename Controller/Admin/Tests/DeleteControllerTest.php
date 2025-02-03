@@ -33,9 +33,9 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 final class DeleteControllerTest extends WebTestCase
 {
-    private const URL = '/admin/ozon/delete/%s';
+    private const string URL = '/admin/ozon/delete/%s';
 
-    private const ROLE = 'ROLE_OZON_DELETE';
+    private const string ROLE = 'ROLE_OZON_DELETE';
 
     private static ?OzonTokenEventUid $identifier = null;
 
