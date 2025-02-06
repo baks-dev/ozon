@@ -40,8 +40,7 @@ final class OzonTokenDTO implements OzonTokenEventInterface
      * Торговая наценка
      */
     #[Assert\NotBlank]
-    #[Assert\Range(min: -100, max: 100)]
-    private int $percent = 0;
+    private ?string $percent = null;
 
     /**
      * Профиль
@@ -127,12 +126,12 @@ final class OzonTokenDTO implements OzonTokenEventInterface
     }
 
 
-    public function getPercent(): int
+    public function getPercent(): string
     {
         return $this->percent;
     }
 
-    public function setPercent(int $percent): self
+    public function setPercent(string $percent): self
     {
         $this->percent = $percent;
         return $this;

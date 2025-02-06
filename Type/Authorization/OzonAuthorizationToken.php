@@ -53,7 +53,7 @@ final class OzonAuthorizationToken
     /**
      * Торговая наценка
      */
-    private int $percent;
+    private ?string $percent;
 
 
     public function __construct(
@@ -61,7 +61,7 @@ final class OzonAuthorizationToken
         string $token,
         string $client,
         string $warehouse,
-        int|string|null $percent = 0
+        string|null $percent = null
     ) {
 
         if(is_string($profile))
@@ -79,7 +79,7 @@ final class OzonAuthorizationToken
             $percent = 0;
         }
 
-        $this->percent = (int) $percent;
+        $this->percent = $percent;
     }
 
 
@@ -107,7 +107,7 @@ final class OzonAuthorizationToken
         return $this->warehouse;
     }
 
-    public function getPercent(): int
+    public function getPercent(): ?string
     {
         return $this->percent;
     }

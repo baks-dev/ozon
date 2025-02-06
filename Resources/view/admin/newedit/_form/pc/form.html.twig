@@ -15,16 +15,47 @@
         {{ form_row(form.token, { label: 'Токен авторизации' }) }}
 
         {% if form.client.vars.data %}
-            <div class="alert alert-warning" role="alert">
-                В целях безопастности токен зашифрован и не отображается в форме. Оставьте поле пустым, если обновление
-                указанного ранее токена не требуется!
+            <div class="alert alert-warning small p-1 ps-2 pe-0" role="alert">
+                В целях безопастности токен зашифрован и не отображается. Оставьте поле пустым, если не требуется
+                обновления
             </div>
         {% endif %}
 
         <div class="d-flex gap-3">
-            {{ form_row(form.client, { label: 'Идентификатор клиента' }) }}
-            {{ form_row(form.warehouse, { label: 'Идентификатор склада' }) }}
-            {{ form_row(form.percent, { label: 'Торговая наценка' }) }}
+            <div class="w-50">{{ form_row(form.client, { label: 'Идентификатор клиента' }) }}</div>
+            <div class="w-50">{{ form_row(form.warehouse, { label: 'Идентификатор склада' }) }}</div>
+
+
+            <div class="w-50">
+                <div class="d-flex gap-2 align-items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="text-muted" viewBox="0 0 16 16" role="tooltip" data-bs-toggle="tooltip"
+                         data-bs-placement="bottom"
+                         data-bs-html="true"
+                         data-bs-original-title="Положительное либо отрицательное число в рублях, либо с процентом, пример:
+                         <br>100.1
+                         <br>-100.1
+                         <br>10.1%
+                         <br>-10.1%">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"></path>
+                    </svg>
+                    <label class="m-0 form-label required" for="{{ form.percent.vars.id }}">Торговая наценка</label>
+                </div>
+
+                {{ form_widget(form.percent, { label: 'Торговая наценка' }) }}
+            </div>
+        </div>
+
+        <div class="alert alert-danger small p-1 px-3 " role="alert">
+            <div class="d-flex align-items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                </svg>
+                <span>
+                При указании торговой наценки Вам необходимо учитывать процент комиссии банка за услуги перевода
+                </span>
+            </div>
         </div>
 
         <div class="flex-fill d-flex justify-content-around pb-3 radio-buttons gap-3" data-buttons="true">

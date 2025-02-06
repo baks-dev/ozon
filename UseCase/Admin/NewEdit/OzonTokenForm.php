@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -80,9 +81,7 @@ final class OzonTokenForm extends AbstractType
 
         $builder->add('token', TextareaType::class, ['required' => false]);
 
-        $builder->add('percent', IntegerType::class, [
-            'attr' => ['max' => 100, 'min' => -100]
-        ]);
+        $builder->add('percent', TextType::class);
 
         /* Сохранить ******************************************************/
         $builder->add(
