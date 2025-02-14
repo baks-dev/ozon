@@ -74,12 +74,7 @@ final class OzonAuthorizationToken
         $this->client = $client;
         $this->warehouse = $warehouse;
 
-        if(is_null($percent))
-        {
-            $percent = 0;
-        }
-
-        $this->percent = $percent;
+        $this->percent = empty($percent) ? null : $percent;
     }
 
 
