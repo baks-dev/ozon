@@ -38,10 +38,7 @@ final class IndexController extends AbstractController
             )
             ->handleRequest($request);
 
-        // Фильтр
-        // $filter = new ProductsStocksFilterDTO($request, $ROLE_ADMIN ? null : $this->getProfileUid());
-        // $filterForm = $this->createForm(ProductsStocksFilterForm::class, $filter);
-        // $filterForm->handleRequest($request);
+        $this->isAdmin() ?: $allOzon->profile($this->getProfileUid());
 
         // Получаем список
         $Ozon = $allOzon
