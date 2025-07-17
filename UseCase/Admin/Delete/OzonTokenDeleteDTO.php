@@ -18,9 +18,6 @@ final class OzonTokenDeleteDTO implements OzonTokenEventInterface
     #[Assert\Uuid]
     private ?OzonTokenEventUid $id = null;
 
-    #[Assert\NotBlank]
-    private readonly UserProfileUid $profile;
-
     /**
      * Идентификатор события
      */
@@ -28,15 +25,4 @@ final class OzonTokenDeleteDTO implements OzonTokenEventInterface
     {
         return $this->id;
     }
-
-    public function getProfile(): UserProfileUid
-    {
-        return $this->profile;
-    }
-
-    public function setProfile(UserProfileUid $profile): void
-    {
-        $this->profile = $profile;
-    }
-
 }

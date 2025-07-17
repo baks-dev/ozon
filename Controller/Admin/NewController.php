@@ -24,19 +24,23 @@ final class NewController extends AbstractController
     public function news(
         Request $request,
         OzonTokenHandler $OzonHandler,
-    ): Response {
+    ): Response
+    {
 
         $OzonDTO = new OzonTokenDTO();
 
-        $this->isAdmin() ?: $OzonDTO->setProfile($this->getProfileUid());
+        $this->isAdmin() ?: $OzonDTO->getProfile()->setValue($this->getProfileUid()); //->setProfile($this->getProfileUid());
 
         // Форма
-        $form = $this->createForm(OzonTokenForm::class, $OzonDTO, [
-            'action' => $this->generateUrl('ozon:admin.newedit.new'),
-        ]);
-        $form->handleRequest($request);
+        $form = $this
+            ->createForm(
+                type: OzonTokenForm::class,
+                data: $OzonDTO,
+                options: ['action' => $this->generateUrl('ozon:admin.newedit.new'),],
+            )
+            ->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && $form->has('ozon_token'))
+        if($form->isSubmitted() && $form->isValid() && $form->has('ozon_token'))
         {
             $handle = $OzonHandler->handle($OzonDTO);
 

@@ -5,11 +5,26 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Entity\Event;
 
 use BaksDev\Core\Entity\EntityEvent;
-use BaksDev\Ozon\Entity\Modify\OzonTokenModify;
+use BaksDev\Ozon\Entity\Event\Active\OzonTokenActive;
+use BaksDev\Ozon\Entity\Event\Card\OzonTokenCard;
+use BaksDev\Ozon\Entity\Event\Client\OzonTokenClient;
+use BaksDev\Ozon\Entity\Event\Modify\Action\OzonTokenModifyAction;
+use BaksDev\Ozon\Entity\Event\Modify\DateTime\OzonTokenModifyDateTime;
+use BaksDev\Ozon\Entity\Event\Modify\IpAddress\OzonTokenModifyIpAddress;
+use BaksDev\Ozon\Entity\Event\Modify\User\OzonTokenModifyUser;
+use BaksDev\Ozon\Entity\Event\Modify\UserAgent\OzonTokenModifyUserAgent;
+use BaksDev\Ozon\Entity\Event\Name\OzonTokenName;
+use BaksDev\Ozon\Entity\Event\Percent\OzonTokenPercent;
+use BaksDev\Ozon\Entity\Event\Profile\OzonTokenProfile;
+use BaksDev\Ozon\Entity\Event\Stocks\OzonTokenStocks;
+use BaksDev\Ozon\Entity\Event\Token\OzonTokenValue;
+use BaksDev\Ozon\Entity\Event\Type\OzonTokenType;
+use BaksDev\Ozon\Entity\Event\Vat\OzonTokenVat;
+use BaksDev\Ozon\Entity\Event\Warehouse\OzonTokenWarehouse;
 use BaksDev\Ozon\Entity\OzonToken;
 use BaksDev\Ozon\Type\Event\OzonTokenEventUid;
+use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,65 +49,112 @@ class OzonTokenEvent extends EntityEvent
      */
     #[Assert\Uuid]
     #[Assert\NotBlank]
-    #[ORM\Column(type: UserProfileUid::TYPE)]
-    private UserProfileUid $profile;
+    #[ORM\Column(type: OzonTokenUid::TYPE)]
+    private OzonTokenUid $main;
 
 
     /**
-     * Модификатор
+     * Название
      */
-    #[ORM\OneToOne(targetEntity: OzonTokenModify::class, mappedBy: 'event', cascade: ['all'])]
-    private OzonTokenModify $modify;
+    #[ORM\OneToOne(targetEntity: OzonTokenName::class, mappedBy: 'event', cascade: ['all'])]
+    private OzonTokenName $name;
 
-    /**
-     * Id Клиента
-     */
-    #[Assert\NotBlank]
-    #[ORM\Column(type: Types::STRING)]
-    private string $client;
-
-    /**
-     * Токен
-     */
-    #[Assert\NotBlank]
-    #[ORM\Column(type: Types::TEXT)]
-    private string $token;
-
-
-    /**
-     * Id склада
-     */
-    #[Assert\NotBlank]
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    private string $warehouse;
-
-
-    /**
-     * Торговая наценка
-     */
-    #[Assert\NotBlank]
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    private ?string $percent = null;
 
     /**
      * Флаг активности токена
      */
-    #[Assert\Type('boolean')]
-    #[ORM\Column(type: Types::BOOLEAN)]
-    private bool $active;
+    #[ORM\OneToOne(targetEntity: OzonTokenActive::class, mappedBy: 'event', cascade: ['all'])]
+    private OzonTokenActive $active;
 
     /**
-     * Переводы
+     * Торговая наценка
      */
-    //#[ORM\OneToMany(mappedBy: 'event', targetEntity: OzonTokenTrans::class, cascade: ['all'])]
-    //private Collection $translate;
+    #[ORM\OneToOne(targetEntity: OzonTokenPercent::class, mappedBy: 'event', cascade: ['all'])]
+    private OzonTokenPercent $percent;
+
+
+    /**
+     * Профиль пользователя
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenProfile::class, mappedBy: 'event', cascade: ['all'])]
+    private OzonTokenProfile $profile;
+
+    /**
+     * Токен
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenValue::class, mappedBy: 'event', cascade: ['all'])]
+    private OzonTokenValue $token;
+
+    /**
+     * Тип расчета стоимости услуг
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenType::class, mappedBy: 'event', cascade: ['all'])]
+    private OzonTokenType $type;
+
+    /**
+     * Id Клиента
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenClient::class, mappedBy: 'event', cascade: ['all'])]
+    private OzonTokenClient $client;
+
+    /**
+     * Идентификатор склада
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenWarehouse::class, mappedBy: 'event', cascade: ['all'])]
+    private OzonTokenWarehouse $warehouse;
+
+    /**
+     * Обновлять карточки продукта
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenCard::class, mappedBy: 'event', cascade: ['all'])]
+    private ?OzonTokenCard $card = null;
+
+    /**
+     * Запустить продажи
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenStocks::class, mappedBy: 'event', cascade: ['all'])]
+    private ?OzonTokenStocks $stocks = null;
+
+    /**
+     * НДС, применяемый для товара
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenVat::class, mappedBy: 'event', cascade: ['all'])]
+    private ?OzonTokenVat $vat = null;
+
+    /**
+     * Модификатор
+     */
+
+    /** OzonTokenModifyAction */
+    #[ORM\OneToOne(targetEntity: OzonTokenModifyAction::class, mappedBy: 'event', cascade: ['all'])]
+    private ?OzonTokenModifyAction $action = null;
+
+    /** OzonTokenModifyDateTime */
+    #[ORM\OneToOne(targetEntity: OzonTokenModifyDateTime::class, mappedBy: 'event', cascade: ['all'])]
+    private OzonTokenModifyDateTime $datetime;
+
+    /** OzonTokenModifyUserAgent */
+    #[ORM\OneToOne(targetEntity: OzonTokenModifyUserAgent::class, mappedBy: 'event', cascade: ['all'])]
+    private ?OzonTokenModifyUserAgent $agent = null;
+
+    /** OzonTokenModifyIpAddress */
+    #[ORM\OneToOne(targetEntity: OzonTokenModifyIpAddress::class, mappedBy: 'event', cascade: ['all'])]
+    private ?OzonTokenModifyIpAddress $ipv = null;
+
+    /** OzonTokenModifyUser */
+    #[ORM\OneToOne(targetEntity: OzonTokenModifyUser::class, mappedBy: 'event', cascade: ['all'])]
+    private ?OzonTokenModifyUser $user = null;
 
 
     public function __construct()
     {
         $this->id = new OzonTokenEventUid();
-        $this->modify = new OzonTokenModify($this);
 
+        $this->action = new OzonTokenModifyAction($this);
+        $this->datetime = new OzonTokenModifyDateTime($this);
+        $this->agent = new OzonTokenModifyUserAgent($this);
+        $this->user = new OzonTokenModifyUser($this);
+        $this->ipv = new OzonTokenModifyIpAddress($this);
     }
 
     /**
@@ -102,6 +164,7 @@ class OzonTokenEvent extends EntityEvent
     public function __clone()
     {
         $this->id = clone new OzonTokenEventUid();
+        $this->datetime = clone $this->datetime;
     }
 
     public function __toString(): string
@@ -117,14 +180,14 @@ class OzonTokenEvent extends EntityEvent
     /**
      * Идентификатор OzonToken
      */
-    public function setMain(UserProfileUid|OzonToken $main): void
+    public function setMain(OzonTokenUid|OzonToken $main): void
     {
-        $this->profile = $main instanceof OzonToken ? $main->getId() : $main;
+        $this->main = $main instanceof OzonToken ? $main->getId() : $main;
     }
 
-    public function getMain(): ?UserProfileUid
+    public function getMain(): ?OzonTokenUid
     {
-        return $this->profile;
+        return $this->main;
     }
 
     public function getDto($dto): mixed
@@ -149,6 +212,31 @@ class OzonTokenEvent extends EntityEvent
 
     public function getProfile(): UserProfileUid
     {
-        return $this->profile;
+        return $this->profile->getValue();
+    }
+
+    public function equalsTokenProfile(UserProfileUid $profile): bool
+    {
+        return $this->profile->getValue()->equals($profile);
+    }
+
+    public function getAction(): OzonTokenModifyAction
+    {
+        return $this->action ?: $this->action = new OzonTokenModifyAction($this);
+    }
+
+    public function getAgent(): OzonTokenModifyUserAgent
+    {
+        return $this->agent ?: $this->agent = new OzonTokenModifyUserAgent($this);
+    }
+
+    public function getIpAddress(): OzonTokenModifyIpAddress
+    {
+        return $this->ipv ?: $this->ipv = new OzonTokenModifyIpAddress($this);
+    }
+
+    public function getUser(): OzonTokenModifyUser
+    {
+        return $this->user ?: $this->user = new OzonTokenModifyUser($this);
     }
 }

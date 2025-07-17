@@ -20,16 +20,16 @@
 
                 {# Добавить #}
                 {% if is_granted(ROLE~'_NEW') or is_granted('ROLE_ADMIN') %}
-                    {% if (not is_granted('ROLE_ADMIN') and query.counter < 1) or is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('ozon:admin.newedit.new') }}"
-                           class="btn btn-primary fw-bolder modal-link disabled"
-                           data-bs-toggle="modal"
-                           data-bs-target="#modal"
-                           title='Добавить токен авторизации'
-                        >
-                            {{ 'btn.new'|trans({}, 'core.btn') }}
-                        </a>
-                    {% endif %}
+                    {# {% if (not is_granted('ROLE_ADMIN') and query.counter < 2) or is_granted('ROLE_ADMIN') %} #}
+                    <a href="{{ path('ozon:admin.newedit.new') }}"
+                       class="btn btn-primary fw-bolder modal-link disabled"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modal"
+                       title='Добавить токен авторизации'
+                    >
+                        {{ 'btn.new'|trans({}, 'core.btn') }}
+                    </a>
+                    {# {% endif %} #}
                 {% endif %}
             </div>
 
@@ -43,21 +43,25 @@
             <table class="table table-striped table-borderless mt-3"
                    style='--bs-table-striped-bg: rgba(249,249,249,0.7);'
             >
-                <thead>
 
+                <thead>
                 <tr>
                     <th>#</th>
-                    <th class='w-100'> Профиль пользователя</th>
+                    <th class='w-100'>
+                        Название <small>( Профиль пользователя )</small>
+                    </th>
                     <th class='text-nowrap'>Статус токена</th>
                     <th class='text-nowrap'>Статус профиля</th>
+                    <td class='text-nowrap text-end'>
+                        <span class="text-secondary">Обновление:</span>
+                    </td>
 
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <th class='text-nowrap'>&nbsp;</th>
-                    {% endif %}
+                    <th class='text-center'>Карточек</th>
+                    <th class='text-center'>Остатки</th>
 
                 </tr>
-
                 </thead>
+
                 <tbody>
 
                 {% for item in query.data %}

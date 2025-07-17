@@ -5,40 +5,49 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Messenger;
 
 use BaksDev\Ozon\Type\Event\OzonTokenEventUid;
-use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use BaksDev\Ozon\Type\Id\OzonTokenUid;
 
 final class OzonTokenMessage
 {
+    private string $id;
+    private string $event;
+    private string|false $last;
+
     public function __construct(
-        private readonly UserProfileUid $id,
-        private readonly OzonTokenEventUid $event,
-        private readonly ?OzonTokenEventUid $last = null
-    ) {
-    }
-
-    /**
-     * Идентификатор
-     */
-    public function getId(): UserProfileUid
+        OzonTokenUid $id,
+        OzonTokenEventUid $event,
+        ?OzonTokenEventUid $last = null
+    )
     {
-        return $this->id;
+
+        $this->id = (string) $id;
+        $this->event = (string) $event;
+        $this->last = ($last instanceof OzonTokenEventUid) ? (string) $last : false;
     }
 
+    /**
+     * Id
+     */
+    public function getId(): OzonTokenUid
+    {
+        return new OzonTokenUid($this->id);
+    }
 
     /**
-     * Идентификатор события
+     * Event
      */
     public function getEvent(): OzonTokenEventUid
     {
-        return $this->event;
+        return new OzonTokenEventUid($this->event);
     }
 
     /**
-     * Идентификатор предыдущего события
+     * Last
      */
-    public function getLast(): ?OzonTokenEventUid
+    public function getLast(): OzonTokenEventUid|false
     {
-        return $this->last;
+        return $this->last ? new OzonTokenEventUid($this->last) : false;
     }
+
 
 }

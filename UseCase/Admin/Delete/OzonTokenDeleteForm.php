@@ -17,7 +17,7 @@ final class OzonTokenDeleteForm extends AbstractType
         $builder->add(
             'ozon_token_delete',
             SubmitType::class,
-            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-primary']]
+            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-danger']],
         );
     }
 

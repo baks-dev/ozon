@@ -9,8 +9,8 @@ use BaksDev\Ozon\Type\Event\OzonTokenEventUid;
 use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Users\Profile\UserProfile\Entity\UserProfile;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /* OzonToken */
@@ -25,20 +25,21 @@ class OzonToken
     #[Assert\NotBlank]
     #[Assert\Uuid]
     #[ORM\Id]
-    #[ORM\Column(type: UserProfileUid::TYPE)]
-    private UserProfileUid $id;
+    #[ORM\Column(type: OzonTokenUid::TYPE)]
+    private OzonTokenUid $id;
 
     /**
      * Идентификатор события
      */
     #[Assert\NotBlank]
     #[Assert\Uuid]
-    #[ORM\Column(type: OzonTokenEventUid::TYPE, unique: true)]
+    #[ORM\Id]
+    #[ORM\Column(type: OzonTokenEventUid::TYPE)]
     private OzonTokenEventUid $event;
 
-    public function __construct(UserProfile|UserProfileUid $profile)
+    public function __construct()
     {
-        $this->id = $profile instanceof UserProfile ? $profile->getId() : $profile;
+        $this->id = new OzonTokenUid();
     }
 
     public function __toString(): string
@@ -49,7 +50,7 @@ class OzonToken
     /**
      * Идентификатор
      */
-    public function getId(): UserProfileUid
+    public function getId(): OzonTokenUid
     {
         return $this->id;
     }

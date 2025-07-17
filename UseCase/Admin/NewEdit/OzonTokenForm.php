@@ -5,12 +5,23 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\UseCase\Admin\NewEdit;
 
 use BaksDev\DeliveryTransport\Type\ProductParameter\Weight\Kilogram\Kilogram;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Active\OzonTokenActiveForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Card\OzonTokenCardForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Client\OzonTokenClientForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Name\OzonTokenNameForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Percent\OzonTokenPercentForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Profile\OzonTokenProfileForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Stocks\OzonTokenStocksForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Value\OzonTokenValueForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Vat\OzonTokenVatForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseForm;
 use BaksDev\Users\Profile\UserProfile\Repository\UserProfileChoice\UserProfileChoiceInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,67 +32,29 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class OzonTokenForm extends AbstractType
 {
-    public function __construct(
-        private readonly UserProfileChoiceInterface $profileChoice
-    ) {}
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var OzonTokenDTO $data */
-        $data = $builder->getData();
+        $builder->add('name', OzonTokenNameForm::class, ['label' => false]);
 
-        if(!$data->getProfile())
-        {
-            /* TextType */
-            $builder->add('profile', ChoiceType::class, [
-                'choices' => $this->profileChoice->getActiveUserProfile(),
-                'choice_value' => function (?UserProfileUid $profile) {
-                    return $profile?->getValue();
-                },
-                'choice_label' => function (UserProfileUid $profile) {
-                    return $profile->getAttr();
-                },
-                'label' => false,
-                'expanded' => false,
-                'multiple' => false,
-                'required' => false,
-                'attr' => ['data-select' => 'select2',]
-            ]);
+        $builder->add('profile', OzonTokenProfileForm::class, ['label' => false]);
 
-        }
+        $builder->add('active', OzonTokenActiveForm::class, ['label' => false]);
 
-        $builder->add('active', CheckboxType::class, ['required' => false]);
+        $builder->add('card', OzonTokenCardForm::class, ['label' => false]);
 
-        $builder->add('client', NumberType::class, ['required' => false]);
+        $builder->add('stocks', OzonTokenStocksForm::class, ['label' => false]);
 
-        $builder->get('client')->addModelTransformer(
-            new CallbackTransformer(
-                function ($client) {
-                    return (int) $client;
-                },
-                function ($client) {
-                    return $client ? (string) $client : null;
-                }
-            )
-        );
+        $builder->add('client', OzonTokenClientForm::class, ['label' => false]);
 
-        $builder->add('warehouse', NumberType::class, ['required' => false]);
+        $builder->add('type', Type\OzonTokenTypeForm::class, ['label' => false]);
 
-        $builder->get('warehouse')->addModelTransformer(
-            new CallbackTransformer(
-                function ($client) {
-                    return (int) $client;
-                },
-                function ($client) {
-                    return $client ? (string) $client : null;
-                }
-            )
-        );
+        $builder->add('percent', OzonTokenPercentForm::class, ['label' => false]);
 
+        $builder->add('token', OzonTokenValueForm::class, ['label' => false]);
 
-        $builder->add('token', TextareaType::class, ['required' => false]);
+        $builder->add('warehouse', OzonTokenWarehouseForm::class, ['label' => false]);
 
-        $builder->add('percent', TextType::class);
+        $builder->add('vat', OzonTokenVatForm::class, ['label' => false]);
 
         /* Сохранить ******************************************************/
         $builder->add(

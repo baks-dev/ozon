@@ -26,8 +26,10 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Api;
 
 use BaksDev\Core\Cache\AppCacheInterface;
-use BaksDev\Ozon\Repository\OzonTokenByProfile\OzonTokenByProfileInterface;
+use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
+use BaksDev\Ozon\Repository\OzonTokensByProfile\OzonTokensByProfileInterface;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
+use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use DomainException;
 use InvalidArgumentException;
@@ -49,7 +51,7 @@ abstract class Ozon
     public function __construct(
         #[Autowire(env: 'APP_ENV')] private readonly string $environment,
         #[Target('ozonLogger')] protected readonly LoggerInterface $logger,
-        private readonly OzonTokenByProfileInterface $TokenByProfile,
+        private readonly OzonTokensByProfileInterface $TokenByProfile,
         private readonly AppCacheInterface $cache,
     ) {}
 
@@ -62,7 +64,9 @@ abstract class Ozon
 
         $this->profile = $profile;
 
-        $this->AuthorizationToken = $this->TokenByProfile->getToken($this->profile);
+        $this->AuthorizationToken = $this->TokenByProfile
+            ->forProfile($this->profile)
+            ->getToken();
 
         return $this;
     }
@@ -92,11 +96,13 @@ abstract class Ozon
                 $this->logger->critical('Не указан идентификатор профиля пользователя через вызов метода profile', [__FILE__.':'.__LINE__]);
 
                 throw new InvalidArgumentException(
-                    'Не указан идентификатор профиля пользователя через вызов метода profile: ->profile($UserProfileUid)'
+                    'Не указан идентификатор профиля пользователя через вызов метода profile: ->profile($UserProfileUid)',
                 );
             }
 
-            $this->AuthorizationToken = $this->TokenByProfile->getToken($this->profile);
+            $this->AuthorizationToken = $this->TokenByProfile
+                ->forProfile($this->profile)
+                ->getToken();
 
             if($this->AuthorizationToken === false)
             {
@@ -113,16 +119,19 @@ abstract class Ozon
             HttpClient::create(['headers' => $this->headers])
                 ->withOptions([
                     'base_uri' => 'https://api-seller.ozon.ru',
-                    'verify_host' => false
-                ])
+                    'verify_host' => false,
+                ]),
         );
     }
 
-    /**
-     * Profile
-     */
+
     protected function getProfile(): UserProfileUid|false
     {
+        if(false === ($this->AuthorizationToken instanceof OzonAuthorizationToken))
+        {
+            return false;
+        }
+
         return $this->profile;
     }
 
@@ -136,14 +145,29 @@ abstract class Ozon
         return $this->AuthorizationToken->getClient();
     }
 
-    protected function getWarehouse(): int
+    protected function getWarehouse(): string
     {
-        return (int) $this->AuthorizationToken->getWarehouse();
+        return $this->AuthorizationToken->getWarehouse();
     }
 
-    protected function getPercent(): ?string
+    protected function getPercent(): string
     {
         return $this->AuthorizationToken->getPercent();
+    }
+
+    protected function isCard(): bool
+    {
+        return $this->AuthorizationToken->isCard() === true;
+    }
+
+    protected function isStocks(): bool
+    {
+        return $this->AuthorizationToken->isStocks() === true;
+    }
+
+    protected function getType(): TypeProfileUid
+    {
+        return $this->AuthorizationToken->getType();
     }
 
     public function getCacheInit(string $namespace): CacheInterface

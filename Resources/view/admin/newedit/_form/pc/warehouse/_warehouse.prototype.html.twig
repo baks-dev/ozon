@@ -1,0 +1,27 @@
+{% trans_default_domain 'ozon' %}
+
+<div class='d-flex gap-3 align-items-center'>
+    {{ form_widget(form.warehouse.vars.prototype.delete, {
+        label: '<span class="svg-icon svg-icon-2 text-nowrap">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+                                                <rect opacity="0.5" x="7.05025" y="15.5356" width="12" height="2" rx="1" transform="rotate(-45 7.05025 15.5356)" fill="currentColor"></rect>
+                                                <rect x="8.46447" y="7.05029" width="12" height="2" rx="1" transform="rotate(45 8.46447 7.05029)" fill="currentColor"></rect>
+                                            </svg></span>',
+        attr: {
+            class: 'btn-outline-danger btn-sm del-item border-0 ',
+            'data-delete' : 'item_'~form.warehouse.vars.prototype.vars.id }
+    }) }}
+
+    <div class="w-100">
+        {{ form_widget(form.warehouse.vars.prototype.value.value) }}
+
+    </div>
+
+    <div class="px-4 h5" style="min-width: 75px;">
+        {{ form_widget(form.warehouse.vars.prototype.stocks.value) }}
+    </div>
+
+    <div class="px-4 h5" style="min-width: 75px;">
+        {{ form_widget(form.warehouse.vars.prototype.price.value) }}
+    </div>
+</div>

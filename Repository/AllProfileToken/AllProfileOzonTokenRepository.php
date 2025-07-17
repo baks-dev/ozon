@@ -26,10 +26,11 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Repository\AllProfileToken;
 
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
-use BaksDev\Ozon\Entity\Event\OzonTokenEvent;
+use BaksDev\Ozon\Entity\Event\Active\OzonTokenActive;
+use BaksDev\Ozon\Entity\Event\Profile\OzonTokenProfile;
 use BaksDev\Ozon\Entity\OzonToken;
-use BaksDev\Users\Profile\UserProfile\Entity\Info\UserProfileInfo;
-use BaksDev\Users\Profile\UserProfile\Entity\Personal\UserProfilePersonal;
+use BaksDev\Users\Profile\UserProfile\Entity\Event\Info\UserProfileInfo;
+use BaksDev\Users\Profile\UserProfile\Entity\Event\Personal\UserProfilePersonal;
 use BaksDev\Users\Profile\UserProfile\Entity\UserProfile;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\UserProfileStatus\Status\UserProfileStatusActive;
@@ -50,6 +51,8 @@ final class AllProfileOzonTokenRepository implements AllProfileOzonTokenInterfac
 
     /**
      * Метод возвращает идентификаторы профилей всех добавленных токенов
+     *
+     * @return Generator<UserProfileUid>
      */
     public function findAll(): Generator
     {
@@ -61,18 +64,25 @@ final class AllProfileOzonTokenRepository implements AllProfileOzonTokenInterfac
         {
             $dbal->join(
                 'token',
-                OzonTokenEvent::class,
-                'event',
-                'event.id = token.event AND event.active = true',
+                OzonTokenActive::class,
+                'active',
+                'active.event = token.event AND active.value IS TRUE',
             );
         }
+
+        $dbal->join(
+            'token',
+            OzonTokenProfile::class,
+            'profile',
+            'profile.event = token.event',
+        );
 
         $dbal
             ->join(
                 'token',
                 UserProfileInfo::class,
                 'users_profile_info',
-                'users_profile_info.profile = token.id AND users_profile_info.status = :status',
+                'users_profile_info.profile = profile.value AND users_profile_info.status = :status',
             )
             ->setParameter(
                 'status',
@@ -95,10 +105,12 @@ final class AllProfileOzonTokenRepository implements AllProfileOzonTokenInterfac
             'personal.event = users_profile.event',
         );
 
-
         /** Параметры конструктора объекта гидрации */
         $dbal->addSelect('token.id AS value');
         $dbal->addSelect('personal.username AS attr');
+
+
+        $dbal->allGroupByExclude();
 
         return $dbal
             ->enableCache('ozon', '1 minutes')

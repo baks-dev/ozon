@@ -25,12 +25,14 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\UseCase\Admin\Delete\Tests;
 
-use BaksDev\Ozon\Entity\Event\OzonTokenEvent;
 use BaksDev\Ozon\Entity\OzonToken;
 use BaksDev\Ozon\Repository\OzonTokenCurrentEvent\OzonTokenCurrentEventInterface;
+use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Ozon\UseCase\Admin\Delete\OzonTokenDeleteDTO;
 use BaksDev\Ozon\UseCase\Admin\Delete\OzonTokenDeleteHandler;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Tests\OzonTokenNewTest;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseDTO;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -50,20 +52,33 @@ class OzonTokenDeleteTest extends KernelTestCase
     {
         /** @var OzonTokenCurrentEventInterface $OzonTokenCurrentEvent */
         $OzonTokenCurrentEvent = self::getContainer()->get(OzonTokenCurrentEventInterface::class);
-        $OzonTokenEvent = $OzonTokenCurrentEvent->findByProfile(UserProfileUid::TEST);
+
+        $OzonTokenEvent = $OzonTokenCurrentEvent->find(new OzonTokenUid(OzonTokenUid::TEST));
+
         self::assertNotNull($OzonTokenEvent);
         self::assertNotFalse($OzonTokenEvent);
-
 
         /** @see OzonTokenDTO */
         $OzonTokenDTO = new OzonTokenDTO();
         $OzonTokenEvent->getDto($OzonTokenDTO);
 
-        self::assertEquals('ozon_token_edit', $OzonTokenDTO->getToken());
-        self::assertEquals('987654321', $OzonTokenDTO->getClient());
-        self::assertEquals('78789878978', $OzonTokenDTO->getWarehouse());
-        self::assertFalse($OzonTokenDTO->getActive());
-        self::assertFalse($OzonTokenDTO->getProfile()->equals(UserProfileUid::TEST)); //($UserProfileUid::TEST, $OzonTokenDTO->getProfile());
+        self::assertEquals('Новое название', $OzonTokenDTO->getName()->getValue());
+        self::assertEquals('ozon_token_edit', $OzonTokenDTO->getToken()->getValue());
+        self::assertEquals('987654321', $OzonTokenDTO->getClient()->getValue());
+
+
+        $EditOzonTokenWarehouseDTO = $OzonTokenDTO->getWarehouse()->current();
+        self::assertNotFalse($EditOzonTokenWarehouseDTO);
+        self::assertCount(1, $OzonTokenDTO->getWarehouse());
+        self::assertInstanceOf(OzonTokenWarehouseDTO::class, $EditOzonTokenWarehouseDTO);
+
+
+        self::assertEquals('78789878978', $EditOzonTokenWarehouseDTO->getValue()->getValue());
+        self::assertFalse($EditOzonTokenWarehouseDTO->getPrice()->getValue());
+        self::assertFalse($EditOzonTokenWarehouseDTO->getStocks()->getValue());
+
+        self::assertTrue($OzonTokenDTO->getActive()->getValue());
+        self::assertFalse($OzonTokenDTO->getProfile()->getValue()->equals(UserProfileUid::TEST));
 
         /** @see OzonTokenDeleteDTO */
         $OzonTokenDeleteDTO = new OzonTokenDeleteDTO();
@@ -79,26 +94,6 @@ class OzonTokenDeleteTest extends KernelTestCase
 
     public static function tearDownAfterClass(): void
     {
-        /** @var EntityManagerInterface $em */
-        $em = self::getContainer()->get(EntityManagerInterface::class);
-
-        $main = $em->getRepository(OzonToken::class)
-            ->findOneBy(['id' => UserProfileUid::TEST]);
-
-        if($main)
-        {
-            $em->remove($main);
-        }
-
-        $event = $em->getRepository(OzonTokenEvent::class)
-            ->findBy(['profile' => UserProfileUid::TEST]);
-
-        foreach($event as $remove)
-        {
-            $em->remove($remove);
-        }
-
-        $em->flush();
-        $em->clear();
+        OzonTokenNewTest::setUpBeforeClass();
     }
 }

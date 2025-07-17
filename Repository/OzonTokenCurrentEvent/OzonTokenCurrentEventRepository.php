@@ -5,30 +5,29 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Repository\OzonTokenCurrentEvent;
 
 use BaksDev\Core\Doctrine\ORMQueryBuilder;
-use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Ozon\Entity\Event\OzonTokenEvent;
 use BaksDev\Ozon\Entity\OzonToken;
+use BaksDev\Ozon\Type\Id\OzonTokenUid;
 
-final readonly class OzonTokenCurrentEventRepository implements OzonTokenCurrentEventInterface
+final class OzonTokenCurrentEventRepository implements OzonTokenCurrentEventInterface
 {
-    public function __construct(private ORMQueryBuilder $ORMQueryBuilder)
-    {
-    }
+    private OzonTokenUid|false $token = false;
+
+    public function __construct(private readonly ORMQueryBuilder $ORMQueryBuilder) {}
 
     /** Метод возвращает активное событие токена профиля */
-    public function findByProfile(UserProfileUid|string $profile): OzonTokenEvent|false
+    public function find(OzonToken|OzonTokenUid $token): OzonTokenEvent|false
     {
-        if(is_string($profile))
-        {
-            $profile = new UserProfileUid($profile);
-        }
-
         $orm = $this->ORMQueryBuilder->createQueryBuilder(self::class);
 
         $orm
             ->from(OzonToken::class, 'main')
-            ->where('main.id = :profile')
-            ->setParameter('profile', $profile, UserProfileUid::TYPE);
+            ->where('main.id = :token')
+            ->setParameter(
+                key: 'token',
+                value: $token instanceof OzonToken ? $token->getId() : $token,
+                type: OzonTokenUid::TYPE,
+            );
 
         $orm
             ->select('event')
@@ -36,9 +35,9 @@ final readonly class OzonTokenCurrentEventRepository implements OzonTokenCurrent
                 OzonTokenEvent::class,
                 'event',
                 'WITH',
-                'event.id = main.event'
+                'event.id = main.event',
             );
 
-        return $orm->getQuery()->getOneOrNullResult() ?: false;
+        return $orm->getOneOrNullResult() ?: false;
     }
 }

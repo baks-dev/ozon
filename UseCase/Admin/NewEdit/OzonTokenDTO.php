@@ -6,7 +6,17 @@ namespace BaksDev\Ozon\UseCase\Admin\NewEdit;
 
 use BaksDev\Ozon\Entity\Event\OzonTokenEventInterface;
 use BaksDev\Ozon\Type\Event\OzonTokenEventUid;
-use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Active\OzonTokenActiveDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Card\OzonTokenCardDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Client\OzonTokenClientDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Name\OzonTokenNameDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Percent\OzonTokenPercentDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Profile\OzonTokenProfileDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Stocks\OzonTokenStocksDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Type\OzonTokenTypeDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Value\OzonTokenValueDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Vat\OzonTokenVatDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseDTO;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /** @see OzonTokenEvent */
@@ -19,122 +29,146 @@ final class OzonTokenDTO implements OzonTokenEventInterface
     private ?OzonTokenEventUid $id = null;
 
     /**
-     * Токен
+     * Название
      */
-    #[Assert\NotBlank]
-    private ?string $token;
+    #[Assert\Valid]
+    private OzonTokenNameDTO $name;
 
     /**
      * Id Клиента
      */
-    #[Assert\NotBlank]
-    private string $client;
-
-    /**
-     * Id склада
-     */
-    #[Assert\NotBlank]
-    private string $warehouse;
-
-    /**
-     * Торговая наценка
-     */
-    #[Assert\NotBlank]
-    private ?string $percent = null;
+    #[Assert\Valid]
+    private OzonTokenClientDTO $client;
 
     /**
      * Профиль
      */
-    #[Assert\NotBlank]
-    private ?UserProfileUid $profile = null;
+    #[Assert\Valid]
+    private OzonTokenProfileDTO $profile;
 
     /**
      * Флаг активности токена
      */
-    private bool $active;
+    #[Assert\Valid]
+    private OzonTokenActiveDTO $active;
 
 
     /**
-     * Идентификатор события
+     * Торговая наценка
      */
+    #[Assert\Valid]
+    private OzonTokenPercentDTO $percent;
+
+    /**
+     * Токен
+     */
+    #[Assert\Valid]
+    private OzonTokenValueDTO $token;
+
+    /**
+     * Тип доставки
+     */
+    #[Assert\Valid]
+    private OzonTokenTypeDTO $type;
+
+    /**
+     * Идентификатор склада
+     */
+    #[Assert\Valid]
+    private OzonTokenWarehouseDTO $warehouse;
+
+    /**
+     * Обновлять карточки продукта
+     */
+    #[Assert\Valid]
+    private OzonTokenCardDTO $card;
+
+    /**
+     * Запустить продажи
+     */
+    #[Assert\Valid]
+    private OzonTokenStocksDTO $stocks;
+
+    /**
+     * НДС, применяемый для товара
+     */
+    #[Assert\Valid]
+    private OzonTokenVatDTO $vat;
+
+
+    public function __construct()
+    {
+        $this->type = new OzonTokenTypeDTO();
+        $this->profile = new OzonTokenProfileDTO();
+        $this->active = new OzonTokenActiveDTO();
+        $this->card = new OzonTokenCardDTO();
+        $this->stocks = new OzonTokenStocksDTO();
+        $this->percent = new OzonTokenPercentDTO();
+        $this->token = new OzonTokenValueDTO();
+        $this->client = new OzonTokenClientDTO();
+        $this->name = new OzonTokenNameDTO();
+        $this->warehouse = new OzonTokenWarehouseDTO();
+        $this->vat = new OzonTokenVatDTO();
+    }
+
     public function getEvent(): ?OzonTokenEventUid
     {
         return $this->id;
     }
 
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-
-    public function setToken(?string $token): void
-    {
-        if(!empty($token))
-        {
-            $this->token = $token;
-        }
-    }
-
-    public function hiddenToken(): void
-    {
-        $this->token = null;
-    }
-
-
-    public function getProfile(): ?UserProfileUid
+    public function getProfile(): OzonTokenProfileDTO
     {
         return $this->profile;
     }
 
-    public function setProfile(UserProfileUid $profile): void
+    public function getName(): OzonTokenNameDTO
     {
-        $this->profile = $profile;
+        return $this->name;
     }
 
-    public function getClient(): string
+    public function getClient(): OzonTokenClientDTO
     {
         return $this->client;
     }
 
-    public function setClient(string $client): void
+    public function getToken(): OzonTokenValueDTO
     {
-        $this->client = $client;
+        return $this->token;
     }
 
-    /**
-     * Warehouse
-     */
-    public function getWarehouse(): string
-    {
-        return $this->warehouse;
-    }
-
-    public function setWarehouse(string $warehouse): self
-    {
-        $this->warehouse = $warehouse;
-        return $this;
-    }
-
-    public function getActive(): bool
+    public function getActive(): OzonTokenActiveDTO
     {
         return $this->active;
     }
 
-    public function setActive(bool $active): void
-    {
-        $this->active = $active;
-    }
-
-
-    public function getPercent(): string
+    public function getPercent(): OzonTokenPercentDTO
     {
         return $this->percent;
     }
 
-    public function setPercent(string $percent): self
+
+    public function getCard(): OzonTokenCardDTO
     {
-        $this->percent = $percent;
-        return $this;
+        return $this->card;
     }
 
+    public function getStocks(): OzonTokenStocksDTO
+    {
+        return $this->stocks;
+    }
+
+    public function getWarehouse(): OzonTokenWarehouseDTO
+    {
+        return $this->warehouse;
+    }
+
+    public function getVat(): OzonTokenVatDTO
+    {
+        return $this->vat;
+    }
+
+    public function getType(): OzonTokenTypeDTO
+    {
+        return $this->type;
+    }
 }

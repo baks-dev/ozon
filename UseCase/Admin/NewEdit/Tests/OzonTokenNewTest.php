@@ -27,8 +27,10 @@ namespace BaksDev\Ozon\UseCase\Admin\NewEdit\Tests;
 
 use BaksDev\Ozon\Entity\Event\OzonTokenEvent;
 use BaksDev\Ozon\Entity\OzonToken;
+use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenHandler;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseDTO;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -47,7 +49,7 @@ class OzonTokenNewTest extends KernelTestCase
         $em = self::getContainer()->get(EntityManagerInterface::class);
 
         $main = $em->getRepository(OzonToken::class)
-            ->findOneBy(['id' => UserProfileUid::TEST]);
+            ->findOneBy(['id' => OzonTokenUid::TEST]);
 
         if($main)
         {
@@ -55,7 +57,7 @@ class OzonTokenNewTest extends KernelTestCase
         }
 
         $event = $em->getRepository(OzonTokenEvent::class)
-            ->findBy(['profile' => UserProfileUid::TEST]);
+            ->findBy(['main' => OzonTokenUid::TEST]);
 
         foreach($event as $remove)
         {
@@ -72,22 +74,43 @@ class OzonTokenNewTest extends KernelTestCase
         /** @see OzonTokenDTO */
         $OzonTokenDTO = new OzonTokenDTO();
 
-        $OzonTokenDTO->setToken('ozon_token');
-        $OzonTokenDTO->setClient('1234567890');
+        $OzonTokenDTO->getActive()->setValue(true);
+        self::assertTrue($OzonTokenDTO->getActive()->getValue());
 
-        self::assertEquals('ozon_token', $OzonTokenDTO->getToken());
-        self::assertEquals('1234567890', $OzonTokenDTO->getClient());
+        $OzonTokenDTO->getName()->setValue('Название');
+        self::assertEquals('Название', $OzonTokenDTO->getName()->getValue());
 
-
-        $OzonTokenDTO->setActive(true);
-        self::assertTrue($OzonTokenDTO->getActive());
-
-        $OzonTokenDTO->setWarehouse('123456789');
-        self::assertEquals('123456789', $OzonTokenDTO->getWarehouse());
+        $OzonTokenDTO->getClient()->setValue('1234567890');
+        self::assertEquals('1234567890', $OzonTokenDTO->getClient()->getValue());
 
         $UserProfileUid = new UserProfileUid(UserProfileUid::TEST);
-        $OzonTokenDTO->setProfile($UserProfileUid);
-        self::assertSame($UserProfileUid, $OzonTokenDTO->getProfile());
+        $OzonTokenDTO->getProfile()->setValue($UserProfileUid);
+        self::assertSame($UserProfileUid, $OzonTokenDTO->getProfile()->getValue());
+
+        $OzonTokenDTO->getType()->setValue(true);
+        self::assertTrue($OzonTokenDTO->getType()->getValue());
+
+        $OzonTokenDTO->getToken()->setValue('ozon_token');
+        self::assertEquals('ozon_token', $OzonTokenDTO->getToken()->getValue());
+
+
+        $EditOzonTokenWarehouseDTO = new OzonTokenWarehouseDTO();
+
+        $EditOzonTokenWarehouseDTO->getValue()->setValue('123456789');
+        self::assertEquals('123456789', $EditOzonTokenWarehouseDTO->getValue()->getValue());
+
+        $EditOzonTokenWarehouseDTO->getStocks()->setValue(true);
+        self::assertTrue($EditOzonTokenWarehouseDTO->getStocks()->getValue());
+
+        $EditOzonTokenWarehouseDTO->getPrice()->setValue(true);
+        self::assertTrue($EditOzonTokenWarehouseDTO->getPrice()->getValue());
+
+        $OzonTokenDTO->addWarehouse($EditOzonTokenWarehouseDTO);
+
+
+        $OzonTokenDTO->getPercent()->setValue('10');
+        self::assertEquals('10', $OzonTokenDTO->getPercent()->getValue());
+
 
         /** @var OzonTokenHandler $OzonTokenHandler */
         $OzonTokenHandler = self::getContainer()->get(OzonTokenHandler::class);

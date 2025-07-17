@@ -21,3 +21,55 @@
  */
 
 
+document.querySelectorAll("#add_warehouse").forEach(function(item)
+{
+    item.addEventListener("click", addWarehouse);
+});
+
+function addWarehouse()
+{
+
+    /* Получаем прототип формы */
+    let newForm = this.dataset.prototype;
+    let index = this.dataset.index * 1;
+    let collection = this.dataset.collection;
+
+    newForm = newForm.replace(/__warehouse__/g, index);
+
+    let div = document.createElement("div");
+    div.innerHTML = newForm;
+    div.id = "item_ozon_token_form_warehouse_" + index;
+    div.classList.add("mb-3");
+
+    let $collection = document.getElementById(collection);
+    $collection.append(div);
+
+
+    /* Удаляем контактный номер телефона */
+    (div.querySelector(".del-item"))?.addEventListener("click", deleteWarehouse);
+
+    this.dataset.index = (index + 1).toString();
+
+    ///** обновляем warehouse */
+    //var inputs = document.querySelectorAll('input[type="tel"]');
+    //
+    //Array.prototype.forEach.call(inputs, function(input) {
+    //    if(input.classList.contains('loaded') === false)
+    //    {
+    //        new InputMask(input)
+    //    }
+    //})
+}
+
+document.querySelectorAll(".del-item").forEach(function(item)
+{
+    item.addEventListener("click", deleteWarehouse);
+});
+
+function deleteWarehouse()
+{
+    document.getElementById(this.dataset.delete).remove();
+}
+
+
+

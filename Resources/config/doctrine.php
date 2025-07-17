@@ -26,11 +26,18 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use BaksDev\Ozon\BaksDevOzonBundle;
 use BaksDev\Ozon\Type\Event\OzonTokenEventType;
 use BaksDev\Ozon\Type\Event\OzonTokenEventUid;
+use BaksDev\Ozon\Type\Id\OzonTokenType;
+use BaksDev\Ozon\Type\Id\OzonTokenUid;
+use BaksDev\Ozon\Type\Warehouse\OzonTokenWarehouseType;
+use BaksDev\Ozon\Type\Warehouse\OzonTokenWarehouseUid;
 use Symfony\Config\DoctrineConfig;
 
 return static function (DoctrineConfig $doctrine, ContainerConfigurator $configurator): void {
 
+
+    $doctrine->dbal()->type(OzonTokenUid::TYPE)->class(OzonTokenType::class);
     $doctrine->dbal()->type(OzonTokenEventUid::TYPE)->class(OzonTokenEventType::class);
+    $doctrine->dbal()->type(OzonTokenWarehouseUid::TYPE)->class(OzonTokenWarehouseType::class);
 
     $emDefault = $doctrine->orm()->entityManager('default')->autoMapping(true);
 

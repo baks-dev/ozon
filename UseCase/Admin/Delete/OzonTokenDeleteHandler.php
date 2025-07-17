@@ -16,7 +16,7 @@ final class OzonTokenDeleteHandler extends AbstractHandler
     {
         $this->setCommand($command);
 
-        $this->preEventRemove(new OzonToken($command->getProfile()), OzonTokenEvent::class);
+        $this->preEventRemove(OzonToken::class, OzonTokenEvent::class);
 
         /** Валидация всех объектов */
         if($this->validatorCollection->isInvalid())

@@ -14,8 +14,9 @@ final class OzonTokenHandler extends AbstractHandler
     /** @see Ozon */
     public function handle(OzonTokenDTO $command): string|OzonToken
     {
+
         $this->setCommand($command);
-        $this->preEventPersistOrUpdate(new OzonToken($command->getProfile()), OzonTokenEvent::class);
+        $this->preEventPersistOrUpdate(OzonToken::class, OzonTokenEvent::class);
 
         /** Валидация всех объектов */
         if($this->validatorCollection->isInvalid())
@@ -26,10 +27,12 @@ final class OzonTokenHandler extends AbstractHandler
         $this->flush();
 
         /* Отправляем сообщение в шину */
-        $this->messageDispatch->dispatch(
-            message: new OzonTokenMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-            transport: 'ozon'
-        );
+        $this->messageDispatch
+            ->addClearCacheOther('ozon')
+            ->dispatch(
+                message: new OzonTokenMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
+                transport: 'ozon-products',
+            );
 
         return $this->main;
     }

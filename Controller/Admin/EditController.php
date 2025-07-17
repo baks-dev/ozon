@@ -31,15 +31,15 @@ final class EditController extends AbstractController
         $OzonDTO = new OzonTokenDTO();
         $OzonEvent->getDto($OzonDTO);
 
-        /** Запрещаем редактировать чужой токен */
-        if($this->isAdmin() === true || $this->getProfileUid()?->equals($OzonEvent->getProfile()) === true)
-        {
-            $OzonEvent->getDto($OzonDTO);
-        }
+        //        /** Запрещаем редактировать чужой токен */
+        //        if($this->isAdmin() === true || $this->getProfileUid()?->equals($OzonEvent->getProfile()) === true)
+        //        {
+        //            $OzonEvent->getDto($OzonDTO);
+        //        }
 
         if($request->getMethod() === 'GET')
         {
-            $OzonDTO->hiddenToken();
+            $OzonDTO->getToken()->hiddenToken();
         }
 
         // Форма

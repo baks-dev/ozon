@@ -5,28 +5,63 @@
     {# ОСНОВНЫЕ НАСТРОЙКИ #}
     <div class="tab-pane fade show active" id="tab_token" role="tabpanel">
 
-        {# Если администратор ресурса  #}
-        {% if is_granted('ROLE_ADMIN') and form.profile is defined %}
-            {{ form_row(form.profile, { label: 'Профиль пользователя', placeholder: 'Выберите профиль из списка...' }) }}
-        {% endif %}
+        {{ form_row(form.name.value, { label: 'Название' }) }}
 
 
+        <div class="d-flex gap-3">
+            {# Если администратор ресурса  #}
+            {% if is_granted('ROLE_ADMIN') and form.profile.value is defined %}
+                <div class="w-50">
+                    {{ form_row(form.profile.value, { label: 'Профиль пользователя', placeholder: 'Выберите профиль из списка...' }) }}
+                </div>
+            {% endif %}
 
-        {{ form_row(form.token, { label: 'Токен авторизации' }) }}
+            <div class="w-100">
+                {{ form_row(form.token.value, { label: 'Токен авторизации' }) }}
+            </div>
+        </div>
 
-        {% if form.client.vars.data %}
+
+        {% if form.token.vars.data %}
             <div class="alert alert-warning small p-1 ps-2 pe-0" role="alert">
-                В целях безопастности токен зашифрован и не отображается. Оставьте поле пустым, если не требуется
-                обновления
+                В целях безопастности токен зашифрован и не отображается. Оставьте поле пустым, если обновление не
+                требуется
             </div>
         {% endif %}
 
+
         <div class="d-flex gap-3">
-            <div class="w-50">{{ form_row(form.client, { label: 'Идентификатор клиента' }) }}</div>
-            <div class="w-50">{{ form_row(form.warehouse, { label: 'Идентификатор склада' }) }}</div>
+
+            <div class="w-100">
+                {{ form_row(form.client.value, { label: 'Идентификатор клиента', attr: { placeholder: 'Client ID', class: 'w-100' } }) }}
+            </div>
+
+            <div class="w-100">
+                {{ form_row(form.warehouse.value, { label: 'Идентификатор склада', attr: { placeholder: 'Warehouse ID' } }) }}
+            </div>
+
+        </div>
+
+        <div class="mb-3">
+            <div class="form-label">Схема расчета стоимости услуг маркетплейса</div>
+            <div class="d-flex gap-3 align-content-center">
+                {% for type in form.type.value %}
+                    <div class="w-100 p-3">
+                        {{ form_widget(type) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
 
 
-            <div class="w-50">
+        <div class="d-flex gap-3">
+
+            <div class="w-100">
+                {{ form_row(form.vat.value, { label: 'НДС, применяемый для товара' }) }}
+            </div>
+
+            <div class="w-100">
+
                 <div class="d-flex gap-2 align-items-center mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="text-muted" viewBox="0 0 16 16" role="tooltip" data-bs-toggle="tooltip"
@@ -42,9 +77,10 @@
                     <label class="m-0 form-label required" for="{{ form.percent.vars.id }}">Торговая наценка</label>
                 </div>
 
-                {{ form_widget(form.percent, { label: 'Торговая наценка' }) }}
+                {{ form_widget(form.percent.value, { label: 'Торговая наценка' }) }}
             </div>
         </div>
+
 
         <div class="alert alert-danger small p-1 px-3 " role="alert">
             <div class="d-flex align-items-center gap-3">
@@ -53,29 +89,74 @@
                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                 </svg>
                 <span>
-                При указании торговой наценки Вам необходимо учитывать процент комиссии банка за услуги перевода
+                При указании торговой наценки необходимо учитывать процент комиссии за банковские услуги
                 </span>
             </div>
         </div>
 
-        <div class="flex-fill d-flex justify-content-around pb-3 radio-buttons gap-3" data-buttons="true">
 
-            <label class="btn p-3 border-dotted rounded-3 w-100 {{ form.active.vars.data ? 'active' }}">
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1">
-                    <span class="h5">
+        <div class="d-flex gap-3">
+
+            <div class="flex-fill d-flex justify-content-around  radio-buttons gap-3" data-buttons="true">
+
+                <label class="btn btn-sm border-dotted rounded-3 w-100 {{ form.active.value.vars.data ? 'active' }}">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                    <span class="h6">
                         <div class="form-check d-flex align-items-center">
-                            {{ form_widget(form.active, { label: false }) }}
-                            <span>
+                            {{ form_widget(form.active.value, { label: false }) }}
+                            <span class="small">
                                 Активный токен
                             </span>
                         </div>
                     </span>
+                        </div>
                     </div>
-                </div>
-            </label>
+                </label>
+
+            </div>
+
+            <div class="flex-fill d-flex justify-content-around radio-buttons gap-3" data-buttons="true">
+
+                <label class="btn btn-sm border-dotted rounded-3 w-100 {{ form.card.value.vars.data ? 'active' }}">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                    <span class="h6">
+                        <div class="form-check d-flex align-items-center">
+                            {{ form_widget(form.card.value, { label: false }) }}
+                            <span class="small">
+                                Обновлять карточки
+                            </span>
+                        </div>
+                    </span>
+                        </div>
+                    </div>
+                </label>
+
+            </div>
+
+            <div class="flex-fill d-flex justify-content-around radio-buttons gap-3" data-buttons="true">
+
+                <label class="btn btn-sm border-dotted rounded-3 w-100 {{ form.stocks.value.vars.data ? 'active' }}">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                    <span class="h6">
+                        <div class="form-check d-flex align-items-center">
+                            {{ form_widget(form.stocks.value, { label: false }) }}
+                            <span class="small">
+                                Запустить продажи
+                            </span>
+                        </div>
+                    </span>
+                        </div>
+                    </div>
+                </label>
+
+            </div>
+
 
         </div>
+
 
     </div>
 </div>

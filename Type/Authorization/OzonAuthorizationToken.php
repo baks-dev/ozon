@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\Ozon\Type\Authorization;
 
+use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 
 final class OzonAuthorizationToken
@@ -32,7 +33,7 @@ final class OzonAuthorizationToken
     /**
      * ID настройки (профиль пользователя)
      */
-    private readonly UserProfileUid $profile;
+    private readonly string $profile;
 
     /**
      * Токен
@@ -45,7 +46,7 @@ final class OzonAuthorizationToken
     private readonly string $client;
 
     /**
-     * Id склада
+     * Идентификаторы складов
      */
     private readonly string $warehouse;
 
@@ -55,34 +56,54 @@ final class OzonAuthorizationToken
      */
     private ?string $percent;
 
+    /**
+     * НДС, применяемый для товара
+     */
+    private int $vat;
+
+    /**
+     * Обновлять карточки
+     */
+    private ?bool $card;
+
+    /**
+     * Запустить продажи
+     */
+    private ?bool $stocks;
+
+    private string $type;
+
 
     public function __construct(
         UserProfileUid|string $profile,
         string $token,
+        string $type,
         string $client,
         string $warehouse,
-        string|null $percent = null
-    ) {
+        string $percent,
 
-        if(is_string($profile))
-        {
-            $profile = new UserProfileUid($profile);
-        }
+        int $vat,
+        ?bool $card,
+        ?bool $stocks,
+    )
+    {
 
-        $this->profile = $profile;
+        $this->profile = (string) $profile;
         $this->token = $token;
         $this->client = $client;
         $this->warehouse = $warehouse;
+        $this->type = $type;
 
-        $this->percent = empty($percent) ? null : $percent;
+        $this->card = $card;
+        $this->stocks = $stocks;
+        $this->percent = $percent;
+        $this->vat = $vat;
     }
-
 
     public function getProfile(): UserProfileUid
     {
-        return $this->profile;
+        return new UserProfileUid($this->profile);
     }
-
 
     public function getToken(): string
     {
@@ -94,17 +115,34 @@ final class OzonAuthorizationToken
         return $this->client;
     }
 
-    /**
-     * Warehouse
-     */
+    public function getPercent(): string
+    {
+        return (string) ($this->percent ?: 0);
+    }
+
     public function getWarehouse(): string
     {
         return $this->warehouse;
     }
 
-    public function getPercent(): ?string
+    public function isCard(): bool
     {
-        return $this->percent;
+        return $this->card === true;
+    }
+
+    public function isStocks(): bool
+    {
+        return $this->stocks === true;
+    }
+
+    public function getVat(): int
+    {
+        return $this->vat;
+    }
+
+    public function getType(): TypeProfileUid
+    {
+        return new TypeProfileUid($this->type);
     }
 
 }

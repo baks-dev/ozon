@@ -23,6 +23,7 @@
 
 namespace BaksDev\Ozon\Repository\AllProfileToken;
 
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Generator;
 
 interface AllProfileOzonTokenInterface
@@ -31,6 +32,8 @@ interface AllProfileOzonTokenInterface
 
     /**
      * Метод возвращает идентификаторы профилей всех добавленных токенов
+     *
+     * @return Generator<UserProfileUid>
      */
     public function findAll(): Generator;
 }
