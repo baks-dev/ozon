@@ -26,9 +26,12 @@ declare(strict_types=1);
 namespace BaksDev\Ozon\Api;
 
 use BaksDev\Core\Cache\AppCacheInterface;
+use BaksDev\Ozon\Entity\OzonToken;
 use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
+use BaksDev\Ozon\Repository\OzonToken\OzonTokenInterface;
 use BaksDev\Ozon\Repository\OzonTokensByProfile\OzonTokensByProfileInterface;
 use BaksDev\Ozon\Type\Authorization\OzonAuthorizationToken;
+use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use DomainException;
@@ -44,6 +47,8 @@ abstract class Ozon
 {
     protected UserProfileUid|false $profile = false;
 
+    protected OzonTokenUid|false $identifier = false;
+
     private OzonAuthorizationToken|false $AuthorizationToken = false;
 
     private array $headers;
@@ -51,10 +56,13 @@ abstract class Ozon
     public function __construct(
         #[Autowire(env: 'APP_ENV')] private readonly string $environment,
         #[Target('ozonLogger')] protected readonly LoggerInterface $logger,
-        private readonly OzonTokensByProfileInterface $TokenByProfile,
+        private readonly OzonTokenInterface $OzonToken,
+        private readonly OzonTokensByProfileInterface $OzonTokensByProfile,
         private readonly AppCacheInterface $cache,
     ) {}
 
+
+    /** @deprecated вызов через токен forIdentifier */
     public function profile(UserProfileUid|string $profile): self
     {
         if(is_string($profile))
@@ -64,12 +72,43 @@ abstract class Ozon
 
         $this->profile = $profile;
 
-        $this->AuthorizationToken = $this->TokenByProfile
-            ->forProfile($this->profile)
-            ->getToken();
+        return $this;
+    }
+
+
+    public function forTokenIdentifier(OzonToken|OzonTokenUid|UserProfileUid $identifier): self
+    {
+        /**
+         * Если передан идентификатор профиля пользователя UserProfileUid -
+         * получаем один идентификатор профиля с флагом Card = true
+         */
+        if($identifier instanceof UserProfileUid)
+        {
+            $tokensByProfile = $this->OzonTokensByProfile
+                ->onlyCardUpdate()
+                ->findAll($identifier);
+
+            if(false !== $tokensByProfile && false !== $tokensByProfile->valid())
+            {
+                /** @var OzonTokenUid $identifier */
+                $identifier = $tokensByProfile->current();
+            }
+        }
+
+        if($identifier instanceof OzonToken)
+        {
+            $identifier = $identifier->getId();
+        }
+
+        $this->AuthorizationToken = $this->OzonToken
+            ->forTokenIdentifier($identifier)
+            ->find();
+
+        $this->identifier = $identifier;
 
         return $this;
     }
+
 
     public function TokenHttpClient(OzonAuthorizationToken|false $AuthorizationToken = false): RetryableHttpClient
     {
@@ -77,34 +116,32 @@ abstract class Ozon
          * @note OzonAuthorizationToken $AuthorizationToken передается в тестовом окружении
          * Если передан тестовый AuthorizationToken - присваиваем тестовый профиль
          */
-        if($AuthorizationToken !== false)
+        if($AuthorizationToken instanceof OzonAuthorizationToken)
         {
             $this->AuthorizationToken = $AuthorizationToken;
             $this->profile = $AuthorizationToken->getProfile();
-            $this->TokenByProfile->setAuthorization($AuthorizationToken);
+            $this->OzonToken->setAuthorization($AuthorizationToken);
         }
 
-        if($this->AuthorizationToken === false)
+        if(false === ($this->AuthorizationToken instanceof OzonAuthorizationToken))
         {
-            $this->AuthorizationToken = $this->TokenByProfile->getAuthorization();
+            $this->AuthorizationToken = $this->OzonToken->getAuthorization();
         }
 
-        if($this->AuthorizationToken === false)
+        if(false === ($this->AuthorizationToken instanceof OzonAuthorizationToken))
         {
-            if($this->profile === false)
+            if(false === ($this->identifier instanceof OzonTokenUid))
             {
-                $this->logger->critical('Не указан идентификатор профиля пользователя через вызов метода profile', [__FILE__.':'.__LINE__]);
-
                 throw new InvalidArgumentException(
-                    'Не указан идентификатор профиля пользователя через вызов метода profile: ->profile($UserProfileUid)',
+                    'Не указан идентификатор токена профиля пользователя через вызов метода forIdentifier: ->forIdentifier($OzonTokenUid)',
                 );
             }
 
-            $this->AuthorizationToken = $this->TokenByProfile
-                ->forProfile($this->profile)
-                ->getToken();
+            $this->AuthorizationToken = $this->OzonToken
+                ->forTokenIdentifier($this->identifier)
+                ->find();
 
-            if($this->AuthorizationToken === false)
+            if(false === ($this->AuthorizationToken instanceof OzonAuthorizationToken))
             {
                 throw new DomainException(sprintf('Токен авторизации Ozon не найден: %s', $this->profile));
             }

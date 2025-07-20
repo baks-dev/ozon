@@ -63,6 +63,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
             ->createQueryBuilder(self::class)
             ->bindLocal();
 
+
         $dbal
             ->select('token.id')
             ->addSelect('token.event')
@@ -238,6 +239,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
                 ->addSearchLike('account_event.email')
                 ->addSearchLike('users_profile_personal.username');
         }
+
 
         return $this->paginator->fetchAllAssociative($dbal);
 

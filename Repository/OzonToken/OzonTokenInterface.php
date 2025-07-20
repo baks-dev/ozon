@@ -29,11 +29,13 @@ use BaksDev\Ozon\Type\Id\OzonTokenUid;
 
 interface OzonTokenInterface
 {
-    public function onlyActive(): self;
+    public function andNotActive(): self;
+
+    public function forTokenIdentifier(OzonToken|OzonTokenUid $identifier): self;
 
     /**
      * Метод возвращает токен авторизации профиля
      */
-    public function find(OzonToken|OzonTokenUid $token): OzonAuthorizationToken|false;
+    public function find(): OzonAuthorizationToken|false;
 
 }

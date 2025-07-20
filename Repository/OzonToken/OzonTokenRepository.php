@@ -42,34 +42,72 @@ use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Users\Profile\UserProfile\Entity\Event\Info\UserProfileInfo;
 use BaksDev\Users\Profile\UserProfile\Type\UserProfileStatus\Status\UserProfileStatusActive;
 use BaksDev\Users\Profile\UserProfile\Type\UserProfileStatus\UserProfileStatus;
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(public: true)]
 final class OzonTokenRepository implements OzonTokenInterface
 {
-    private bool $active = false;
+    private OzonTokenUid|false $identifier = false;
+
+    private OzonAuthorizationToken|false $authorization = false;
+
+    private bool $active = true;
 
     public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
 
-    public function onlyActive(): self
+    public function andNotActive(): self
     {
-        $this->active = true;
+        $this->active = false;
+        return $this;
+    }
+
+    public function forTokenIdentifier(OzonToken|OzonTokenUid|string $identifier): self
+    {
+        if(empty($identifier))
+        {
+            $this->identifier = false;
+            return $this;
+        }
+
+        if(is_string($identifier))
+        {
+            $identifier = new OzonTokenUid($identifier);
+        }
+
+        if($identifier instanceof OzonToken)
+        {
+            $identifier = $identifier->getId();
+        }
+
+        $this->identifier = $identifier;
+
         return $this;
     }
 
     /**
      * Метод возвращает токен авторизации профиля
      */
-    public function find(OzonToken|OzonTokenUid $token): OzonAuthorizationToken|false
+    public function find(): OzonAuthorizationToken|false
     {
+        if($this->authorization instanceof OzonAuthorizationToken)
+        {
+            return $this->authorization;
+        }
+
         $dbal = $this->DBALQueryBuilder->createQueryBuilder(self::class);
+
+        if(false === ($this->identifier instanceof OzonTokenUid))
+        {
+            throw new InvalidArgumentException('Invalid Argument OzonToken');
+        }
 
         $dbal
             ->from(OzonToken::class, 'token')
             ->where('token.id = :token')
             ->setParameter(
                 key: 'token',
-                value: $token instanceof OzonToken ? $token->getId() : $token,
+                value: $this->identifier,
                 type: OzonTokenUid::TYPE,
             );
 
@@ -85,27 +123,13 @@ final class OzonTokenRepository implements OzonTokenInterface
         }
 
         $dbal
-            ->select('profile.value AS profile')
+            ->addSelect('profile.value AS profile')
             ->join(
                 'token',
                 OzonTokenProfile::class,
                 'profile',
                 'profile.event = token.event',
             );
-
-        $dbal
-            ->join(
-                'token',
-                UserProfileInfo::class,
-                'info',
-                'info.profile = profile.value AND info.status = :status',
-            )
-            ->setParameter(
-                key: 'status',
-                value: UserProfileStatusActive::class,
-                type: UserProfileStatus::TYPE,
-            );
-
 
         $dbal
             ->addSelect('token_value.value AS token')
@@ -187,5 +211,16 @@ final class OzonTokenRepository implements OzonTokenInterface
         return $dbal
             ->enableCache('ozon')
             ->fetchHydrate(OzonAuthorizationToken::class);
+    }
+
+    public function setAuthorization(OzonAuthorizationToken $authorization): self
+    {
+        $this->authorization = $authorization;
+        return $this;
+    }
+
+    public function getAuthorization(): false|OzonAuthorizationToken
+    {
+        return $this->authorization;
     }
 }

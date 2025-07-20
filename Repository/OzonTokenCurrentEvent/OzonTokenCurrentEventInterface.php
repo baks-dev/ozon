@@ -14,4 +14,5 @@ interface OzonTokenCurrentEventInterface
 {
     /** Метод возвращает активное событие токена профиля */
     public function find(OzonToken|OzonTokenUid $token): OzonTokenEvent|false;
+
 }
