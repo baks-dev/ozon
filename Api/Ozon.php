@@ -62,20 +62,6 @@ abstract class Ozon
     ) {}
 
 
-    /** @deprecated вызов через токен forIdentifier */
-    public function profile(UserProfileUid|string $profile): self
-    {
-        if(is_string($profile))
-        {
-            $profile = new UserProfileUid($profile);
-        }
-
-        $this->profile = $profile;
-
-        return $this;
-    }
-
-
     public function forTokenIdentifier(OzonToken|OzonTokenUid|UserProfileUid $identifier): self
     {
         /**
@@ -169,7 +155,7 @@ abstract class Ozon
             return false;
         }
 
-        return $this->profile;
+        return $this->AuthorizationToken->getProfile();
     }
 
     protected function getToken(): string
@@ -194,12 +180,16 @@ abstract class Ozon
 
     protected function isCard(): bool
     {
-        return $this->AuthorizationToken->isCard() === true;
+        return
+            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
+            && $this->AuthorizationToken->isCard() === true;
     }
 
     protected function isStocks(): bool
     {
-        return $this->AuthorizationToken->isStocks() === true;
+        return
+            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
+            && $this->AuthorizationToken->isStocks() === true;
     }
 
     protected function getType(): TypeProfileUid
