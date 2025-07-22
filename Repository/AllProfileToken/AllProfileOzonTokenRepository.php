@@ -106,7 +106,7 @@ final class AllProfileOzonTokenRepository implements AllProfileOzonTokenInterfac
         );
 
         /** Параметры конструктора объекта гидрации */
-        $dbal->addSelect('token.id AS value');
+        $dbal->addSelect('profile.value AS value');
         $dbal->addSelect('personal.username AS attr');
 
 
