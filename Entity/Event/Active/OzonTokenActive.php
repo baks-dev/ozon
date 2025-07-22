@@ -48,7 +48,7 @@ class OzonTokenActive extends EntityEvent
     #[ORM\JoinColumn(name: 'event', referencedColumnName: 'id')]
     private OzonTokenEvent $event;
 
-    #[ORM\Column(type: Types::BOOLEAN)]
+
     private bool $value = false;
 
 
