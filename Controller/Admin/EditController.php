@@ -54,7 +54,7 @@ final class EditController extends AbstractController
             $this->refreshTokenForm($form);
 
             /** Запрещаем редактировать чужой токен */
-            if($this->isAdmin() === false && $this->getProfileUid()?->equals($OzonDTO->getProfile()) !== true)
+            if($this->isAdmin() === false && $this->getProfileUid()?->equals($OzonDTO->getProfile()->getValue()) !== true)
             {
                 $this->addFlash('breadcrumb.edit', 'danger.edit', 'ozon.admin', '404');
                 return $this->redirectToReferer();
