@@ -135,9 +135,17 @@ final class OzonAuthorizationToken
         return $this->stocks === true;
     }
 
-    public function getVat(): int
+    public function getVat(): string|false
     {
-        return $this->vat;
+        return match (true)
+        {
+            empty($this->vat) => '0',
+            $this->vat === 5 => '0.05',
+            $this->vat === 7 => '0.07',
+            $this->vat === 10 => '0.1',
+            $this->vat === 20 => '0.2',
+            default => false,
+        };
     }
 
     public function getType(): TypeProfileUid

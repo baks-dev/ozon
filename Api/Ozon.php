@@ -197,10 +197,16 @@ abstract class Ozon
         return $this->AuthorizationToken->getType();
     }
 
+    protected function getVat(): string|false
+    {
+        return $this->AuthorizationToken->getVat();
+    }
+
     public function getCacheInit(string $namespace): CacheInterface
     {
         return $this->cache->init($namespace);
     }
+
 
     /**
      * Метод проверяет что окружение является PROD,
