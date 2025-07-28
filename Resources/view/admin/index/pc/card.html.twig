@@ -9,7 +9,7 @@
 
     <td class="text-center w-100">
 
-        <div class="d-flex w-50 gap-3">
+        <div class="d-flex w-100 gap-3">
 
             {# Обложка #}
             {% set image_path = '/assets/img/blank.svg' %}
@@ -30,7 +30,6 @@
 
             <div class="ms-0 text-start">
 
-
                 <a href="{{ path('ozon:admin.newedit.edit', {id: item.event }) }}"
                    class="fw-bolder text-decoration-none text-dark modal-link disabled"
                    data-bs-toggle="modal"
@@ -39,32 +38,15 @@
                     {{ item.name }} <small>( {{ item.users_profile_username }} )</small>
                 </a>
 
-                <div class="text-muted fs-7 fw-bolder d-flex gap-3">
+                <div class="d-flex align-items-center gap-1 text-primary pointer copy small"
+                     data-copy="{{ item.id }}">
 
-                    {# <span class="me-1 text-muted">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                             viewBox="0 0 24 24" fill="none"
-                        >
-                            <path opacity="0.3"
-                                  d="M22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12ZM12 7C10.3 7 9 8.3 9 10C9 11.7 10.3 13 12 13C13.7 13 15 11.7 15 10C15 8.3 13.7 7 12 7Z"
-                                  fill="currentColor"
-                            ></path>
-                            <path d="M12 22C14.6 22 17 21 18.7 19.4C17.9 16.9 15.2 15 12 15C8.8 15 6.09999 16.9 5.29999 19.4C6.99999 21 9.4 22 12 22Z"
-                                  fill="currentColor"
-                            ></path>
-                        </svg>
-                    #}{# {{ item.group_name }} #}{#
-                    </span> #}
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="14"
+                         height="14" fill="currentColor" viewBox="0 0 115.77 122.88">
+                        <path d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"></path>
+                    </svg>
 
-                    <span class="me-1 text-muted">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
-                             fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16"
-                        >
-                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
-                        </svg>
-
-                        {{ item.account_email }}
-                    </span>
+                    {{ item.id }}
                 </div>
 
             </div>
