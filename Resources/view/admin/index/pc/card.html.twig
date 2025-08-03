@@ -12,19 +12,10 @@
         <div class="d-flex w-100 gap-3">
 
             {# Обложка #}
-            {% set image_path = '/assets/img/blank.svg' %}
-
-            {% if item.users_profile_avatar_ext is defined and item.users_profile_avatar_ext is not null %}
-                {% set img_host =  item.users_profile_avatar_cdn == true  ? CDN_HOST : '' %}
-                {% set img_dir = item.users_profile_avatar %}
-                {% set img_file = (img_host is empty ? '/image.' : '/small.') ~ item.users_profile_avatar_ext %}
-                {% set image_path = img_host ~ img_dir ~ img_file %}
-            {% endif %}
-
             <div>
                 <span
                         class="icon rounded-circle bg-cover lazy p-1"
-                        data-bg="{{ image_path }}"
+                        data-bg="{{ cdn_image_path(item.users_profile_avatar, item.users_profile_avatar_ext, item.users_profile_avatar_cdn, 'min') }}"
                 > </span>
             </div>
 
