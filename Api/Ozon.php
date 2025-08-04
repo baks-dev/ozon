@@ -86,6 +86,13 @@ abstract class Ozon
             $identifier = $identifier->getId();
         }
 
+        if(false === ($identifier instanceof OzonTokenUid))
+        {
+            $this->profile = false;
+            $this->identifier = false;
+            return $this;
+        }
+
         $this->AuthorizationToken = $this->OzonToken
             ->forTokenIdentifier($identifier)
             ->find();
