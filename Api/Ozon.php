@@ -165,6 +165,11 @@ abstract class Ozon
         return $this->AuthorizationToken->getProfile();
     }
 
+    public function getIdentifier(): false|OzonTokenUid
+    {
+        return $this->identifier;
+    }
+
     protected function getToken(): string
     {
         return $this->AuthorizationToken->getToken();
