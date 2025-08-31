@@ -22,14 +22,11 @@ use BaksDev\Ozon\Entity\OzonToken;
 use BaksDev\Ozon\Type\Event\OzonTokenEventUid;
 use BaksDev\Users\User\Tests\TestUserAccount;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon
- *
- * @group ozon-controller
- */
+#[Group('ozon')]
 #[When(env: 'test')]
 final class EditAdminControllerTest extends WebTestCase
 {

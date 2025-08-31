@@ -31,23 +31,22 @@ use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Ozon\UseCase\Admin\Delete\OzonTokenDeleteDTO;
 use BaksDev\Ozon\UseCase\Admin\Delete\OzonTokenDeleteHandler;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Tests\OzonTokenEditTest;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Tests\OzonTokenNewTest;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseDTO;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DependsOnClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon
- * @group ozon-usecase
- *
- * @depends BaksDev\Ozon\UseCase\Admin\NewEdit\Tests\OzonTokenNewTest::class
- * @depends BaksDev\Ozon\UseCase\Admin\NewEdit\Tests\OzonTokenEditTest::class
- */
+#[Group('ozon')]
 #[When(env: 'test')]
 class OzonTokenDeleteTest extends KernelTestCase
 {
+    #[DependsOnClass(OzonTokenNewTest::class)]
+    #[DependsOnClass(OzonTokenEditTest::class)]
     public function testUseCase(): void
     {
         /** @var OzonTokenCurrentEventInterface $OzonTokenCurrentEvent */

@@ -31,13 +31,12 @@ use BaksDev\Ozon\Orders\Type\ProfileType\TypeProfileFbsOzon;
 use BaksDev\Ozon\Repository\OzonToken\OzonTokenInterface;
 use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
 
-/**
- * @group ozon
- */
+#[Group('ozon')]
 #[When(env: 'test')]
 class OzonTokenRepositoryTest extends KernelTestCase
 {

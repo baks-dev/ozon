@@ -32,18 +32,16 @@ use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenHandler;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseDTO;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use PHPUnit\Framework\Attributes\DependsOnClass;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon
- * @group ozon-usecase
- *
- * @depends BaksDev\Ozon\UseCase\Admin\NewEdit\Tests\OzonTokenNewTest::class
- */
+#[Group('ozon')]
 #[When(env: 'test')]
 class OzonTokenEditTest extends KernelTestCase
 {
+    #[DependsOnClass(OzonTokenNewTest::class)]
     public function testUseCase(): void
     {
         /** @var OzonTokenCurrentEventInterface $OzonTokenCurrentEvent */

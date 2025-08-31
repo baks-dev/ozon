@@ -29,13 +29,11 @@ use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Ozon\Repository\OzonTokensByProfile\OzonTokensByProfileInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-
-/**
- * @group ozon
- */
+#[Group('ozon')]
 #[When(env: 'test')]
 class OzonTokenByProfileTest extends KernelTestCase
 {

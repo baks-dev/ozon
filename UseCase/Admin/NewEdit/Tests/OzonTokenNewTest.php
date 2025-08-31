@@ -33,13 +33,11 @@ use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenHandler;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseDTO;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @group ozon
- * @group ozon-usecase
- */
+#[Group('ozon')]
 #[When(env: 'test')]
 class OzonTokenNewTest extends KernelTestCase
 {
