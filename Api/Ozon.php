@@ -71,8 +71,9 @@ abstract class Ozon
         if($identifier instanceof UserProfileUid)
         {
             $tokensByProfile = $this->OzonTokensByProfile
+                ->forProfile($identifier)
                 ->onlyCardUpdate()
-                ->findAll($identifier);
+                ->findAll();
 
             if(false !== $tokensByProfile && false !== $tokensByProfile->valid())
             {

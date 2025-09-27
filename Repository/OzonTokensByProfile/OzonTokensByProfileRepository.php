@@ -13,6 +13,7 @@ use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Users\Profile\UserProfile\Entity\UserProfile;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Generator;
+use InvalidArgumentException;
 
 
 final class OzonTokensByProfileRepository implements OzonTokensByProfileInterface
@@ -22,15 +23,23 @@ final class OzonTokensByProfileRepository implements OzonTokensByProfileInterfac
     /** TRUE - только токены с флагом обновления карточки товаров */
     private bool $card;
 
-    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder)
+    private UserProfileUid|false $profile = false;
+
+    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
+
+    public function forProfile(UserProfileUid|UserProfile $profile): self
     {
+        /**  По умолчанию */
         $this->active = true;
         $this->card = false;
-    }
 
-    public function andNotActive(): self
-    {
-        $this->active = false;
+        if($profile instanceof UserProfile)
+        {
+            $profile = $profile->getId();
+        }
+
+        $this->profile = $profile;
+
         return $this;
     }
 
@@ -40,9 +49,9 @@ final class OzonTokensByProfileRepository implements OzonTokensByProfileInterfac
         return $this;
     }
 
-    public function onlyStocksUpdate(): self
+    public function andNotActive(): self
     {
-        $this->card = false;
+        $this->active = false;
         return $this;
     }
 
@@ -51,8 +60,13 @@ final class OzonTokensByProfileRepository implements OzonTokensByProfileInterfac
      *
      * @return Generator<OzonTokenUid>|false
      */
-    public function findAll(UserProfileUid|UserProfile $profile): Generator|false
+    public function findAll(): Generator|false
     {
+        if(false === ($this->profile instanceof UserProfileUid))
+        {
+            throw new InvalidArgumentException('Не указан профиль пользователя');
+        }
+
         $dbal = $this->DBALQueryBuilder->createQueryBuilder(self::class);
 
         $dbal
@@ -68,7 +82,7 @@ final class OzonTokensByProfileRepository implements OzonTokensByProfileInterfac
             )
             ->setParameter(
                 key: 'profile',
-                value: $profile instanceof UserProfile ? $profile->getId() : $profile,
+                value: $this->profile,
                 type: UserProfileUid::TYPE,
             );
 
@@ -97,4 +111,6 @@ final class OzonTokensByProfileRepository implements OzonTokensByProfileInterfac
             ->enableCache('ozon')
             ->fetchAllHydrate(OzonTokenUid::class);
     }
+
+
 }

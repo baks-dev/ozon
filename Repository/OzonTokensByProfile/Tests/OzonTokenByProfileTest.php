@@ -43,7 +43,8 @@ class OzonTokenByProfileTest extends KernelTestCase
         $OzonTokensByProfile = self::getContainer()->get(OzonTokensByProfileInterface::class);
 
         $OzonAuthorizationToken = $OzonTokensByProfile
-            ->findAll(new UserProfileUid('01959e9a-9f53-719b-be4b-00ea35de65c4'));
+            ->forProfile(new UserProfileUid('01959e9a-9f53-719b-be4b-00ea35de65c4'))
+            ->findAll();
 
         self::assertTrue(true);
     }

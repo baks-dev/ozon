@@ -13,10 +13,12 @@ interface OzonTokensByProfileInterface
 
     public function onlyCardUpdate(): self;
 
+    public function forProfile(UserProfileUid|UserProfile $profile): self;
+
     /**
      * Метод возвращает идентификаторы токенов профиля пользователя
      *
      * @return Generator<int, OzonTokenUid>|false $var
      */
-    public function findAll(UserProfile|UserProfileUid $profile): Generator|false;
+    public function findAll(): Generator|false;
 }
