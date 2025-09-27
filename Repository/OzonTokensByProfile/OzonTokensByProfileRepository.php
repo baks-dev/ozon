@@ -17,12 +17,16 @@ use Generator;
 
 final class OzonTokensByProfileRepository implements OzonTokensByProfileInterface
 {
-    private bool $active = true;
+    private bool $active;
 
     /** TRUE - только токены с флагом обновления карточки товаров */
-    private bool $card = false;
+    private bool $card;
 
-    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder) {}
+    public function __construct(private readonly DBALQueryBuilder $DBALQueryBuilder)
+    {
+        $this->active = true;
+        $this->card = false;
+    }
 
     public function andNotActive(): self
     {
@@ -33,6 +37,12 @@ final class OzonTokensByProfileRepository implements OzonTokensByProfileInterfac
     public function onlyCardUpdate(): self
     {
         $this->card = true;
+        return $this;
+    }
+
+    public function onlyStocksUpdate(): self
+    {
+        $this->card = false;
         return $this;
     }
 
