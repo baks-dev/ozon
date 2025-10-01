@@ -8,6 +8,6 @@
 
 
 {% block javascript %}
-<script nonce='{{ csp_nonce() }}' async  data-src="/assets/js/radio.input.min.js?v={{ version }}" class="lazy"></script>
-<script nonce='{{ csp_nonce() }}' async  data-src="/assets/ozon/script.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/{{ version }}/js/radio.input.min.js?v={{ version }}" class="lazy"></script>
+<script nonce='{{ csp_nonce() }}' async  data-src="/assets/{{ version }}/ozon/script.min.js?v={{ version }}" class="lazy"></script>
 {% endblock %}
