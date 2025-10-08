@@ -52,9 +52,9 @@ final class AllProfileOzonTokenRepository implements AllProfileOzonTokenInterfac
     /**
      * Метод возвращает идентификаторы профилей всех добавленных токенов
      *
-     * @return Generator<UserProfileUid>
+     * @return Generator<UserProfileUid>|false
      */
-    public function findAll(): Generator
+    public function findAll(): Generator|false
     {
         $dbal = $this->DBALQueryBuilder->createQueryBuilder(self::class);
 
