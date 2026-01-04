@@ -30,7 +30,7 @@ use BaksDev\Ozon\Entity\OzonToken;
 use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenHandler;
-use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseDTO;
+use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -85,26 +85,21 @@ class OzonTokenNewTest extends KernelTestCase
         $OzonTokenDTO->getProfile()->setValue($UserProfileUid);
         self::assertSame($UserProfileUid, $OzonTokenDTO->getProfile()->getValue());
 
-        $OzonTokenDTO->getType()->setValue(true);
-        self::assertTrue($OzonTokenDTO->getType()->getValue());
+        $OzonTokenDTO->getType()->setValue(new TypeProfileUid(TypeProfileUid::TEST));
+        self::assertTrue($OzonTokenDTO->getType()->getValue()->equals(TypeProfileUid::TEST));
 
         $OzonTokenDTO->getToken()->setValue('ozon_token');
         self::assertEquals('ozon_token', $OzonTokenDTO->getToken()->getValue());
 
 
-        $EditOzonTokenWarehouseDTO = new OzonTokenWarehouseDTO();
+        $OzonTokenDTO->getWarehouse()->setValue('Warehouse');
+        self::assertEquals('Warehouse', $OzonTokenDTO->getWarehouse()->getValue());
 
-        $EditOzonTokenWarehouseDTO->getValue()->setValue('123456789');
-        self::assertEquals('123456789', $EditOzonTokenWarehouseDTO->getValue()->getValue());
+        $OzonTokenDTO->getStocks()->setValue(true);
+        self::assertTrue($OzonTokenDTO->getStocks()->getValue());
 
-        $EditOzonTokenWarehouseDTO->getStocks()->setValue(true);
-        self::assertTrue($EditOzonTokenWarehouseDTO->getStocks()->getValue());
-
-        $EditOzonTokenWarehouseDTO->getPrice()->setValue(true);
-        self::assertTrue($EditOzonTokenWarehouseDTO->getPrice()->getValue());
-
-        $OzonTokenDTO->addWarehouse($EditOzonTokenWarehouseDTO);
-
+        $OzonTokenDTO->getVat()->setValue(10);
+        self::assertEquals('10', $OzonTokenDTO->getVat()->getValue());
 
         $OzonTokenDTO->getPercent()->setValue('10');
         self::assertEquals('10', $OzonTokenDTO->getPercent()->getValue());

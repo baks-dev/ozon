@@ -33,7 +33,7 @@ use BaksDev\Ozon\UseCase\Admin\Delete\OzonTokenDeleteHandler;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Tests\OzonTokenEditTest;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Tests\OzonTokenNewTest;
-use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseDTO;
+use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DependsOnClass;
@@ -64,20 +64,10 @@ class OzonTokenDeleteTest extends KernelTestCase
         self::assertEquals('Новое название', $OzonTokenDTO->getName()->getValue());
         self::assertEquals('ozon_token_edit', $OzonTokenDTO->getToken()->getValue());
         self::assertEquals('987654321', $OzonTokenDTO->getClient()->getValue());
-
-
-        $EditOzonTokenWarehouseDTO = $OzonTokenDTO->getWarehouse()->current();
-        self::assertNotFalse($EditOzonTokenWarehouseDTO);
-        self::assertCount(1, $OzonTokenDTO->getWarehouse());
-        self::assertInstanceOf(OzonTokenWarehouseDTO::class, $EditOzonTokenWarehouseDTO);
-
-
-        self::assertEquals('78789878978', $EditOzonTokenWarehouseDTO->getValue()->getValue());
-        self::assertFalse($EditOzonTokenWarehouseDTO->getPrice()->getValue());
-        self::assertFalse($EditOzonTokenWarehouseDTO->getStocks()->getValue());
-
+        self::assertEquals('edit_warehouse', $OzonTokenDTO->getWarehouse()->getValue());
         self::assertTrue($OzonTokenDTO->getActive()->getValue());
         self::assertFalse($OzonTokenDTO->getProfile()->getValue()->equals(UserProfileUid::TEST));
+        self::assertFalse($OzonTokenDTO->getType()->getValue()->equals(TypeProfileUid::TEST));
 
         /** @see OzonTokenDeleteDTO */
         $OzonTokenDeleteDTO = new OzonTokenDeleteDTO();

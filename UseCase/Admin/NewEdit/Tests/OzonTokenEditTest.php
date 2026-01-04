@@ -30,7 +30,7 @@ use BaksDev\Ozon\Repository\OzonTokenCurrentEvent\OzonTokenCurrentEventInterface
 use BaksDev\Ozon\Type\Id\OzonTokenUid;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\OzonTokenHandler;
-use BaksDev\Ozon\UseCase\Admin\NewEdit\Warehouse\OzonTokenWarehouseDTO;
+use BaksDev\Users\Profile\TypeProfile\Type\Id\TypeProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\DependsOnClass;
 use PHPUnit\Framework\Attributes\Group;
@@ -73,27 +73,19 @@ class OzonTokenEditTest extends KernelTestCase
         $UserProfileUid = new UserProfileUid();
         $OzonTokenDTO->getProfile()->setValue(clone $UserProfileUid);
 
-        self::assertTrue($OzonTokenDTO->getType()->getValue());
-        $OzonTokenDTO->getType()->setValue(false);
+        self::assertTrue($OzonTokenDTO->getType()->getValue()->equals(TypeProfileUid::TEST));
+        $OzonTokenDTO->getType()->setValue(clone new TypeProfileUid());
 
         self::assertEquals('ozon_token', $OzonTokenDTO->getToken()->getValue());
         $OzonTokenDTO->getToken()->setValue('ozon_token_edit');
 
+        self::assertEquals('Warehouse', $OzonTokenDTO->getWarehouse()->getValue());
+        $OzonTokenDTO->getWarehouse()->setValue('edit_warehouse');
 
-        $EditOzonTokenWarehouseDTO = $OzonTokenDTO->getWarehouse()->current();
-        self::assertNotFalse($EditOzonTokenWarehouseDTO);
-        self::assertCount(1, $OzonTokenDTO->getWarehouse());
-        self::assertInstanceOf(OzonTokenWarehouseDTO::class, $EditOzonTokenWarehouseDTO);
+        self::assertTrue($OzonTokenDTO->getStocks()->getValue());
+        $OzonTokenDTO->getStocks()->setValue(false);
 
 
-        self::assertEquals('123456789', $EditOzonTokenWarehouseDTO->getValue()->getValue());
-        $EditOzonTokenWarehouseDTO->getValue()->setValue('78789878978');
-
-        self::assertTrue($EditOzonTokenWarehouseDTO->getPrice()->getValue());
-        $EditOzonTokenWarehouseDTO->getPrice()->setValue(false);
-
-        self::assertTrue($EditOzonTokenWarehouseDTO->getStocks()->getValue());
-        $EditOzonTokenWarehouseDTO->getStocks()->setValue(false);
 
 
         /** @var OzonTokenHandler $OzonTokenHandler */

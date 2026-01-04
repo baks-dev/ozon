@@ -53,9 +53,8 @@ class OzonTokenModifyUser extends EntityEvent
     private OzonTokenEvent $event;
 
     /** Значение свойства */
-    #[Assert\NotBlank]
-    #[ORM\Column(type: UserUid::TYPE)]
-    private UserUid $value;
+    #[ORM\Column(type: UserUid::TYPE, nullable: true)]
+    private ?UserUid $value = null;
 
     public function __construct(OzonTokenEvent $event)
     {

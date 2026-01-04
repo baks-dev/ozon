@@ -27,6 +27,7 @@ namespace BaksDev\Ozon\Repository\AllProfileToken\Tests;
 
 use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Ozon\Repository\AllProfileToken\AllProfileOzonTokenInterface;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -45,7 +46,8 @@ class AllProfileOzonTokenRepositoryTest extends KernelTestCase
 
         foreach($profiles as $UserProfileUid)
         {
-            dump($UserProfileUid);
+            self::assertInstanceOf(UserProfileUid::class, $UserProfileUid);
+            //dump($UserProfileUid);
         }
 
         self::assertTrue(true);
