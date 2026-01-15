@@ -56,8 +56,10 @@
                         <span class="text-secondary">Обновление:</span>
                     </td>
 
-                    <th class='text-center'>Карточек</th>
-                    <th class='text-center'>Остатки</th>
+                    <th class='text-center'>карточек</th>
+                    <th class='text-center'>заказы</th>
+                    <th class='text-center'>остатки</th>
+                    <th class='text-center'>продажи</th>
 
                 </tr>
                 </thead>
@@ -66,6 +68,25 @@
 
                 {% for item in query.data %}
                     {{ include(_self|replace({ "content.html.twig": "card.html.twig" })) }}
+                {% else %}
+
+                    <tr>
+                        <td colspan="9">
+                            <div class="alert alert-warning w-100 mb-0" role="alert">
+
+                                <div class="d-flex align-items-baseline gap-3">
+                                    <div>
+                                        <div class="icon rounded-circle bg-contain p-2 bg-primary text-white"
+                                             style="width: 10px; height: 10px;"><span class="small">!</span></div>
+                                    </div>
+                                    <div class="small lh-1">
+                                        Информация по данному запросу отсутствует
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
                 {% endfor %}
 
                 </tbody>

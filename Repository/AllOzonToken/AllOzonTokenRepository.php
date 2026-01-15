@@ -14,7 +14,9 @@ use BaksDev\Ozon\Entity\Event\Active\OzonTokenActive;
 use BaksDev\Ozon\Entity\Event\Card\OzonTokenCard;
 use BaksDev\Ozon\Entity\Event\Modify\DateTime\OzonTokenModifyDateTime;
 use BaksDev\Ozon\Entity\Event\Name\OzonTokenName;
+use BaksDev\Ozon\Entity\Event\Orders\OzonTokenOrders;
 use BaksDev\Ozon\Entity\Event\Profile\OzonTokenProfile;
+use BaksDev\Ozon\Entity\Event\Sales\OzonTokenSales;
 use BaksDev\Ozon\Entity\Event\Stocks\OzonTokenStocks;
 use BaksDev\Ozon\Entity\Event\Type\OzonTokenType;
 use BaksDev\Ozon\Entity\OzonToken;
@@ -23,6 +25,7 @@ use BaksDev\Users\Profile\UserProfile\Entity\Event\Info\UserProfileInfo;
 use BaksDev\Users\Profile\UserProfile\Entity\Event\Personal\UserProfilePersonal;
 use BaksDev\Users\Profile\UserProfile\Entity\Event\UserProfileEvent;
 use BaksDev\Users\Profile\UserProfile\Entity\UserProfile;
+use BaksDev\Users\Profile\UserProfile\Repository\UserProfileTokenStorage\UserProfileTokenStorageInterface;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Yandex\Market\Entity\Event\Card\YaMarketTokenCard;
 use BaksDev\Yandex\Market\Entity\Event\Stocks\YaMarketTokenStocks;
@@ -37,6 +40,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
     public function __construct(
         private readonly DBALQueryBuilder $DBALQueryBuilder,
         private readonly PaginatorInterface $paginator,
+        private readonly UserProfileTokenStorageInterface $UserProfileTokenStorage
     ) {}
 
     public function search(SearchDTO $search): self
@@ -73,8 +77,14 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
             'token',
             OzonTokenProfile::class,
             'profile',
-            'profile.event = token.event'.($this->profile ? ' AND profile.value = :profile ' : ''),
-        );
+            'profile.event = token.event AND profile.value = :profile ',
+        )
+            ->setParameter(
+                key: 'profile',
+                value: $this->profile instanceof UserProfileUid ? $this->profile : $this->UserProfileTokenStorage->getProfile(),
+                type: UserProfileUid::TYPE,
+            );
+
 
         $dbal
             ->addSelect('date.value AS date')
@@ -96,14 +106,6 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
             );
 
 
-        /** Если не админ - только токен профиля */
-
-        if($this->profile)
-        {
-            $dbal->setParameter('profile', $this->profile, UserProfileUid::TYPE);
-        }
-
-
         $dbal
             ->addSelect('active.value AS active')
             ->join(
@@ -123,6 +125,24 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
                 'card.event = token.event',
             );
 
+        $dbal
+            ->addSelect('orders.value AS orders')
+            ->leftJoin(
+                'token',
+                OzonTokenOrders::class,
+                'orders',
+                'orders.event = token.event',
+            );
+
+
+        $dbal
+            ->addSelect('sales.value AS sales')
+            ->leftJoin(
+                'token',
+                OzonTokenSales::class,
+                'sales',
+                'sales.event = token.event',
+            );
 
         $dbal
             ->addSelect('stocks.value AS stocks')
@@ -170,7 +190,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
             'users_profile',
             UserProfileEvent::class,
             'users_profile_event',
-            'users_profile_event.id = users_profile.event'
+            'users_profile_event.id = users_profile.event',
         );
 
 
@@ -208,7 +228,7 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
             'users_profile_info',
             Account::class,
             'account',
-            'account.id = users_profile_info.usr'
+            'account.id = users_profile_info.usr',
         );
 
         $dbal
@@ -240,8 +260,8 @@ final class AllOzonTokenRepository implements AllOzonTokenInterface
                 ->addSearchLike('users_profile_personal.username');
         }
 
-
-        return $this->paginator->fetchAllAssociative($dbal);
+        return $this->paginator->fetchAllHydrate($dbal, OzonTokenPaginatorResult::class);
+        //return $this->paginator->fetchAllAssociative($dbal);
 
     }
 

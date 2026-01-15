@@ -34,22 +34,22 @@ final class IndexController extends AbstractController
             ->createForm(
                 type: SearchForm::class,
                 data: $search,
-                options: ['action' => $this->generateUrl('ozon:admin.index')]
+                options: ['action' => $this->generateUrl('ozon:admin.index')],
             )
             ->handleRequest($request);
 
-        $this->isAdmin() ?: $allOzon->profile($this->getProfileUid());
 
         // Получаем список
         $Ozon = $allOzon
             ->search($search)
+            ->profile($this->getProfileUid())
             ->findAllPaginator();
 
         return $this->render(
             [
                 'query' => $Ozon,
                 'search' => $searchForm->createView(),
-            ]
+            ],
         );
     }
 }
