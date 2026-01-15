@@ -28,7 +28,7 @@ interface OzonTokenStocksInterface
     /**
      * Значение свойства
      *
-     * @see OzonTokenStocksDTO
+     * @see OzonTokenOrdersDTO
      */
     public function getValue(): bool;
 }

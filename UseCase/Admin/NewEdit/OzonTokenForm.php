@@ -9,8 +9,10 @@ use BaksDev\Ozon\UseCase\Admin\NewEdit\Active\OzonTokenActiveForm;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Card\OzonTokenCardForm;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Client\OzonTokenClientForm;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Name\OzonTokenNameForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Orders\OzonTokenOrdersForm;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Percent\OzonTokenPercentForm;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Profile\OzonTokenProfileForm;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Sales\OzonTokenSalesForm;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Stocks\OzonTokenStocksForm;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Value\OzonTokenValueForm;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Vat\OzonTokenVatForm;
@@ -44,6 +46,10 @@ final class OzonTokenForm extends AbstractType
 
         $builder->add('stocks', OzonTokenStocksForm::class, ['label' => false]);
 
+        $builder->add('sales', OzonTokenSalesForm::class, ['label' => false]);
+
+        $builder->add('orders', OzonTokenOrdersForm::class, ['label' => false]);
+
         $builder->add('client', OzonTokenClientForm::class, ['label' => false]);
 
         $builder->add('type', Type\OzonTokenTypeForm::class, ['label' => false]);
@@ -60,7 +66,7 @@ final class OzonTokenForm extends AbstractType
         $builder->add(
             'ozon_token',
             SubmitType::class,
-            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-primary']]
+            ['label' => 'Save', 'label_html' => true, 'attr' => ['class' => 'btn-primary']],
         );
     }
 

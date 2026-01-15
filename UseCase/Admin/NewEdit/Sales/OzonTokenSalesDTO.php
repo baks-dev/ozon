@@ -23,13 +23,13 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\UseCase\Admin\NewEdit\Stocks;
+namespace BaksDev\Ozon\UseCase\Admin\NewEdit\Sales;
 
-use BaksDev\Ozon\Entity\Event\Stocks\OzonTokenStocksInterface;
+use BaksDev\Ozon\Entity\Event\Sales\OzonTokenSalesInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/** @see OzonTokenOrdersDTO */
-final class OzonTokenStocksDTO implements OzonTokenStocksInterface
+/** @see OzonTokenSales */
+final class OzonTokenSalesDTO implements OzonTokenSalesInterface
 {
     /** Значение свойства */
     private bool|null $value = null;

@@ -35,69 +35,24 @@ final class OzonAuthorizationToken
      */
     private readonly string $profile;
 
-    /**
-     * Токен
-     */
-    private readonly string $token;
-
-    /**
-     * Id Клиента
-     */
-    private readonly string $client;
-
-    /**
-     * Идентификаторы складов
-     */
-    private readonly string $warehouse;
-
-
-    /**
-     * Торговая наценка
-     */
-    private ?string $percent;
-
-    /**
-     * НДС, применяемый для товара
-     */
-    private int $vat;
-
-    /**
-     * Обновлять карточки
-     */
-    private ?bool $card;
-
-    /**
-     * Запустить продажи
-     */
-    private ?bool $stocks;
-
-    private string $type;
-
-
     public function __construct(
         UserProfileUid|string $profile,
-        string $token,
-        string $type,
-        string $client,
-        string $warehouse,
-        string $percent,
+        private readonly string $token,
+        private readonly string $type,
+        private readonly string $client,
+        private readonly string $warehouse,
+        private readonly string $percent,
 
-        int $vat,
-        ?bool $card,
-        ?bool $stocks,
+        private int $vat,
+        private ?bool $card = false, // карточки
+        private ?bool $stocks = false, // остатки
+        private ?bool $orders = false, // заказы
+        private ?bool $sales = false, // продажи
     )
     {
 
         $this->profile = (string) $profile;
-        $this->token = $token;
-        $this->client = $client;
-        $this->warehouse = $warehouse;
-        $this->type = $type;
 
-        $this->card = $card;
-        $this->stocks = $stocks;
-        $this->percent = $percent;
-        $this->vat = $vat;
     }
 
     public function getProfile(): UserProfileUid
@@ -135,6 +90,16 @@ final class OzonAuthorizationToken
         return $this->stocks === true;
     }
 
+    public function isOrders(): ?bool
+    {
+        return $this->orders === true;
+    }
+
+    public function isSales(): ?bool
+    {
+        return $this->sales === true;
+    }
+
     public function getVat(): string|false
     {
         return match (true)
@@ -152,5 +117,6 @@ final class OzonAuthorizationToken
     {
         return new TypeProfileUid($this->type);
     }
+
 
 }

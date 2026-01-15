@@ -125,7 +125,7 @@
                         <div class="form-check d-flex align-items-center">
                             {{ form_widget(form.card.value, { label: false }) }}
                             <span class="small">
-                                Обновлять карточки
+                                Карточки
                             </span>
                         </div>
                     </span>
@@ -137,6 +137,26 @@
 
             <div class="flex-fill d-flex justify-content-around radio-buttons gap-3" data-buttons="true">
 
+                <label class="btn btn-sm border-dotted rounded-3 w-100 {{ form.orders.value.vars.data ? 'active' }}">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                    <span class="h6">
+                        <div class="form-check d-flex align-items-center">
+                            {{ form_widget(form.orders.value, { label: false }) }}
+                            <span class="small">
+                                Заказы
+                            </span>
+                        </div>
+                    </span>
+                        </div>
+                    </div>
+                </label>
+
+            </div>
+
+
+            <div class="flex-fill d-flex justify-content-around radio-buttons gap-3" data-buttons="true">
+
                 <label class="btn btn-sm border-dotted rounded-3 w-100 {{ form.stocks.value.vars.data ? 'active' }}">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
@@ -144,7 +164,26 @@
                         <div class="form-check d-flex align-items-center">
                             {{ form_widget(form.stocks.value, { label: false }) }}
                             <span class="small">
-                                Запустить продажи
+                                Остатки
+                            </span>
+                        </div>
+                    </span>
+                        </div>
+                    </div>
+                </label>
+
+            </div>
+
+            <div class="flex-fill d-flex justify-content-around radio-buttons gap-3" data-buttons="true">
+
+                <label class="btn btn-sm border-dotted rounded-3 w-100 {{ form.sales.value.vars.data ? 'active' }}">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                    <span class="h6">
+                        <div class="form-check d-flex align-items-center">
+                            {{ form_widget(form.sales.value, { label: false }) }}
+                            <span class="small">
+                                Продажи
                             </span>
                         </div>
                     </span>

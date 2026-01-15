@@ -10,8 +10,10 @@ use BaksDev\Ozon\UseCase\Admin\NewEdit\Active\OzonTokenActiveDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Card\OzonTokenCardDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Client\OzonTokenClientDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Name\OzonTokenNameDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Orders\OzonTokenOrdersDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Percent\OzonTokenPercentDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Profile\OzonTokenProfileDTO;
+use BaksDev\Ozon\UseCase\Admin\NewEdit\Sales\OzonTokenSalesDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Stocks\OzonTokenStocksDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Type\OzonTokenTypeDTO;
 use BaksDev\Ozon\UseCase\Admin\NewEdit\Value\OzonTokenValueDTO;
@@ -84,10 +86,23 @@ final class OzonTokenDTO implements OzonTokenEventInterface
     private OzonTokenCardDTO $card;
 
     /**
-     * Запустить продажи
+     * Обновлять остатки
      */
     #[Assert\Valid]
     private OzonTokenStocksDTO $stocks;
+
+    /**
+     * Остановить продажи
+     */
+    #[Assert\Valid]
+    private OzonTokenSalesDTO $sales;
+
+    /**
+     * Обновлять заказы
+     */
+    #[Assert\Valid]
+    private OzonTokenOrdersDTO $orders;
+
 
     /**
      * НДС, применяемый для товара
@@ -103,6 +118,8 @@ final class OzonTokenDTO implements OzonTokenEventInterface
         $this->active = new OzonTokenActiveDTO();
         $this->card = new OzonTokenCardDTO();
         $this->stocks = new OzonTokenStocksDTO();
+        $this->sales = new OzonTokenSalesDTO();
+        $this->orders = new OzonTokenOrdersDTO();
         $this->percent = new OzonTokenPercentDTO();
         $this->token = new OzonTokenValueDTO();
         $this->client = new OzonTokenClientDTO();
@@ -170,5 +187,15 @@ final class OzonTokenDTO implements OzonTokenEventInterface
     public function getType(): OzonTokenTypeDTO
     {
         return $this->type;
+    }
+
+    public function getOrders(): OzonTokenOrdersDTO
+    {
+        return $this->orders;
+    }
+
+    public function getSales(): OzonTokenSalesDTO
+    {
+        return $this->sales;
     }
 }

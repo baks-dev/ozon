@@ -29,8 +29,10 @@ use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Ozon\Entity\Event\Active\OzonTokenActive;
 use BaksDev\Ozon\Entity\Event\Card\OzonTokenCard;
 use BaksDev\Ozon\Entity\Event\Client\OzonTokenClient;
+use BaksDev\Ozon\Entity\Event\Orders\OzonTokenOrders;
 use BaksDev\Ozon\Entity\Event\Percent\OzonTokenPercent;
 use BaksDev\Ozon\Entity\Event\Profile\OzonTokenProfile;
+use BaksDev\Ozon\Entity\Event\Sales\OzonTokenSales;
 use BaksDev\Ozon\Entity\Event\Stocks\OzonTokenStocks;
 use BaksDev\Ozon\Entity\Event\Token\OzonTokenValue;
 use BaksDev\Ozon\Entity\Event\Type\OzonTokenType;
@@ -123,7 +125,6 @@ final class OzonTokenRepository implements OzonTokenInterface
         }
 
         $dbal
-            ->addSelect('profile.value AS profile')
             ->join(
                 'token',
                 OzonTokenProfile::class,
@@ -132,7 +133,6 @@ final class OzonTokenRepository implements OzonTokenInterface
             );
 
         $dbal
-            ->addSelect('token_value.value AS token')
             ->join(
                 'token',
                 OzonTokenValue::class,
@@ -141,7 +141,6 @@ final class OzonTokenRepository implements OzonTokenInterface
             );
 
         $dbal
-            ->addSelect('type.value AS type')
             ->join(
                 'token',
                 OzonTokenType::class,
@@ -151,7 +150,6 @@ final class OzonTokenRepository implements OzonTokenInterface
 
 
         $dbal
-            ->addSelect('client.value AS client')
             ->join(
                 'token',
                 OzonTokenClient::class,
@@ -161,7 +159,6 @@ final class OzonTokenRepository implements OzonTokenInterface
 
 
         $dbal
-            ->addSelect('warehouse.value AS warehouse')
             ->join(
                 'token',
                 OzonTokenWarehouse::class,
@@ -171,7 +168,6 @@ final class OzonTokenRepository implements OzonTokenInterface
 
 
         $dbal
-            ->addSelect('percent.value AS percent')
             ->join(
                 'token',
                 OzonTokenPercent::class,
@@ -180,7 +176,6 @@ final class OzonTokenRepository implements OzonTokenInterface
             );
 
         $dbal
-            ->addSelect('vat.value AS vat')
             ->leftJoin(
                 'token',
                 OzonTokenVat::class,
@@ -189,7 +184,6 @@ final class OzonTokenRepository implements OzonTokenInterface
             );
 
         $dbal
-            ->addSelect('card.value AS card')
             ->leftJoin(
                 'token',
                 OzonTokenCard::class,
@@ -198,13 +192,41 @@ final class OzonTokenRepository implements OzonTokenInterface
             );
 
         $dbal
-            ->addSelect('stocks.value AS stocks')
             ->leftJoin(
                 'token',
                 OzonTokenStocks::class,
                 'stocks',
                 'stocks.event = token.event',
             );
+
+        $dbal
+            ->leftJoin(
+                'token',
+                OzonTokenOrders::class,
+                'orders',
+                'orders.event = token.event',
+            );
+
+        $dbal
+            ->leftJoin(
+                'token',
+                OzonTokenSales::class,
+                'sales',
+                'sales.event = token.event',
+            );
+
+        $dbal
+            ->addSelect('profile.value AS profile')
+            ->addSelect('token_value.value AS token')
+            ->addSelect('type.value AS type')
+            ->addSelect('client.value AS client')
+            ->addSelect('warehouse.value AS warehouse')
+            ->addSelect('percent.value AS percent')
+            ->addSelect('card.value AS card')
+            ->addSelect('vat.value AS vat')
+            ->addSelect('stocks.value AS stocks')
+            ->addSelect('orders.value AS orders')
+            ->addSelect('sales.value AS sales');
 
 
         /* Кешируем результат ORM */

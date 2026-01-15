@@ -198,11 +198,25 @@ abstract class Ozon
             && $this->AuthorizationToken->isCard() === true;
     }
 
+    protected function isOrders(): bool
+    {
+        return
+            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
+            && $this->AuthorizationToken->isOrders() === true;
+    }
+
     protected function isStocks(): bool
     {
         return
             ($this->AuthorizationToken instanceof OzonAuthorizationToken)
             && $this->AuthorizationToken->isStocks() === true;
+    }
+
+    protected function isSales(): bool
+    {
+        return
+            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
+            && $this->AuthorizationToken->isSales() === true;
     }
 
     protected function getType(): TypeProfileUid

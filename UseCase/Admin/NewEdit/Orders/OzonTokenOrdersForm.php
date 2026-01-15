@@ -23,25 +23,29 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\UseCase\Admin\NewEdit\Stocks;
+namespace BaksDev\Ozon\UseCase\Admin\NewEdit\Orders;
 
-use BaksDev\Ozon\Entity\Event\Stocks\OzonTokenStocksInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/** @see OzonTokenOrdersDTO */
-final class OzonTokenStocksDTO implements OzonTokenStocksInterface
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+final class OzonTokenOrdersForm extends AbstractType
 {
-    /** Значение свойства */
-    private bool|null $value = null;
-
-    public function getValue(): bool
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        return $this->value === true;
+        $builder->add('value', CheckboxType::class, ['required' => false]);
     }
 
-    public function setValue(bool|null $value): self
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $this->value = $value === true;
-        return $this;
+        $resolver->setDefaults([
+            'data_class' => OzonTokenOrdersDTO::class,
+            'method' => 'POST',
+            'attr' => ['class' => 'w-100'],
+        ]);
     }
 }

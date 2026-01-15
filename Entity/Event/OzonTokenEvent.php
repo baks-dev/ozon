@@ -14,8 +14,10 @@ use BaksDev\Ozon\Entity\Event\Modify\IpAddress\OzonTokenModifyIpAddress;
 use BaksDev\Ozon\Entity\Event\Modify\User\OzonTokenModifyUser;
 use BaksDev\Ozon\Entity\Event\Modify\UserAgent\OzonTokenModifyUserAgent;
 use BaksDev\Ozon\Entity\Event\Name\OzonTokenName;
+use BaksDev\Ozon\Entity\Event\Orders\OzonTokenOrders;
 use BaksDev\Ozon\Entity\Event\Percent\OzonTokenPercent;
 use BaksDev\Ozon\Entity\Event\Profile\OzonTokenProfile;
+use BaksDev\Ozon\Entity\Event\Sales\OzonTokenSales;
 use BaksDev\Ozon\Entity\Event\Stocks\OzonTokenStocks;
 use BaksDev\Ozon\Entity\Event\Token\OzonTokenValue;
 use BaksDev\Ozon\Entity\Event\Type\OzonTokenType;
@@ -110,10 +112,22 @@ class OzonTokenEvent extends EntityEvent
     private ?OzonTokenCard $card = null;
 
     /**
-     * Запустить продажи
+     * Обновление остатков
      */
     #[ORM\OneToOne(targetEntity: OzonTokenStocks::class, mappedBy: 'event', cascade: ['all'])]
     private ?OzonTokenStocks $stocks = null;
+
+    /**
+     * Запустить продажи
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenSales::class, mappedBy: 'event', cascade: ['all'])]
+    private ?OzonTokenSales $salse = null;
+
+    /**
+     * Запустить продажи
+     */
+    #[ORM\OneToOne(targetEntity: OzonTokenOrders::class, mappedBy: 'event', cascade: ['all'])]
+    private ?OzonTokenOrders $orders = null;
 
     /**
      * НДС, применяемый для товара

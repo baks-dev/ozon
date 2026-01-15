@@ -21,27 +21,14 @@
  *  THE SOFTWARE.
  */
 
-declare(strict_types=1);
+namespace BaksDev\Ozon\Entity\Event\Orders;
 
-namespace BaksDev\Ozon\UseCase\Admin\NewEdit\Stocks;
-
-use BaksDev\Ozon\Entity\Event\Stocks\OzonTokenStocksInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-
-/** @see OzonTokenOrdersDTO */
-final class OzonTokenStocksDTO implements OzonTokenStocksInterface
+interface OzonTokenOrdersInterface
 {
-    /** Значение свойства */
-    private bool|null $value = null;
-
-    public function getValue(): bool
-    {
-        return $this->value === true;
-    }
-
-    public function setValue(bool|null $value): self
-    {
-        $this->value = $value === true;
-        return $this;
-    }
+    /**
+     * Значение свойства
+     *
+     * @see OzonTokenOrdersDTO
+     */
+    public function getValue(): bool;
 }
