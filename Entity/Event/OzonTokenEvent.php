@@ -121,7 +121,7 @@ class OzonTokenEvent extends EntityEvent
      * Запустить продажи
      */
     #[ORM\OneToOne(targetEntity: OzonTokenSales::class, mappedBy: 'event', cascade: ['all'])]
-    private ?OzonTokenSales $salse = null;
+    private ?OzonTokenSales $sales = null;
 
     /**
      * Запустить продажи
