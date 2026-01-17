@@ -109,6 +109,7 @@ final class OzonAuthorizationToken
             $this->vat === 7 => '0.07',
             $this->vat === 10 => '0.1',
             $this->vat === 20 => '0.2',
+            $this->vat === 22 => '0.22',
             default => false,
         };
     }
