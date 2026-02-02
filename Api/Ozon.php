@@ -191,34 +191,6 @@ abstract class Ozon
         return $this->AuthorizationToken->getPercent();
     }
 
-    protected function isCard(): bool
-    {
-        return
-            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
-            && $this->AuthorizationToken->isCard() === true;
-    }
-
-    protected function isOrders(): bool
-    {
-        return
-            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
-            && $this->AuthorizationToken->isOrders() === true;
-    }
-
-    protected function isStocks(): bool
-    {
-        return
-            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
-            && $this->AuthorizationToken->isStocks() === true;
-    }
-
-    protected function isSales(): bool
-    {
-        return
-            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
-            && $this->AuthorizationToken->isSales() === true;
-    }
-
     protected function getType(): TypeProfileUid
     {
         return $this->AuthorizationToken->getType();
@@ -232,6 +204,35 @@ abstract class Ozon
     public function getCacheInit(string $namespace): CacheInterface
     {
         return $this->cache->init($namespace);
+    }
+
+
+    public function isCard(): bool
+    {
+        return
+            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
+            && $this->AuthorizationToken->isCard() === true;
+    }
+
+    public function isOrders(): bool
+    {
+        return
+            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
+            && $this->AuthorizationToken->isOrders() === true;
+    }
+
+    public function isStocks(): bool
+    {
+        return
+            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
+            && $this->AuthorizationToken->isStocks() === true;
+    }
+
+    public function isSales(): bool
+    {
+        return
+            ($this->AuthorizationToken instanceof OzonAuthorizationToken)
+            && $this->AuthorizationToken->isSales() === true;
     }
 
 
