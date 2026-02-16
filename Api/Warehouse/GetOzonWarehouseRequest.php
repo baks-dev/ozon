@@ -42,7 +42,7 @@ final class GetOzonWarehouseRequest extends Ozon
     {
         $response = $this
             ->TokenHttpClient()
-            ->request('POST', '/v1/warehouse/list');
+            ->request('POST', '/v2/warehouse/list');
 
         $content = $response->toArray(false);
 
