@@ -47,9 +47,9 @@ final readonly class OzonTokenPaginatorResult
         private ?bool $sales, // null
         private ?bool $stocks, // false
         private string $type, // "c024b3d2-1866-72c3-83e9-922f8678bf23"
-        private string $users_profile_event, // "019a7449-16d9-74c4-b24c-f22366a0780b"
-        private string $users_profile_status, // "act"
-        private string $users_profile_username, // "White Sign"
+        private ?string $users_profile_event, // "019a7449-16d9-74c4-b24c-f22366a0780b"
+        private ?string $users_profile_status, // "act"
+        private ?string $users_profile_username, // "White Sign"
         private ?string $users_profile_avatar, // null
         private ?string $users_profile_avatar_ext, // null
         private ?bool $users_profile_avatar_cdn, // null
@@ -107,17 +107,17 @@ final readonly class OzonTokenPaginatorResult
         return new TypeProfileUid($this->type);
     }
 
-    public function getUsersProfileEvent(): UserProfileEventUid
+    public function getUsersProfileEvent(): ?UserProfileEventUid
     {
-        return new UserProfileEventUid($this->users_profile_event);
+        return $this->users_profile_event ? new UserProfileEventUid($this->users_profile_event) : null;
     }
 
-    public function getUsersProfileStatus(): UserProfileStatus
+    public function getUsersProfileStatus(): ?UserProfileStatus
     {
-        return new UserProfileStatus($this->users_profile_status);
+        return $this->users_profile_status ? new UserProfileStatus($this->users_profile_status) : null;
     }
 
-    public function getUsersProfileUsername(): string
+    public function getUsersProfileUsername(): ?string
     {
         return $this->users_profile_username;
     }

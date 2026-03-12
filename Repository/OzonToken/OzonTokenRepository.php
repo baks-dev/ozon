@@ -47,7 +47,7 @@ use BaksDev\Users\Profile\UserProfile\Type\UserProfileStatus\UserProfileStatus;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
-#[Autoconfigure(public: true)]
+// #[Autoconfigure(public: true)]
 final class OzonTokenRepository implements OzonTokenInterface
 {
     private OzonTokenUid|false $identifier = false;
