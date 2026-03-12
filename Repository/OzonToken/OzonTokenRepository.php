@@ -1,6 +1,6 @@
 <?php
 /*
- *  Copyright 2025.  Baks.dev <admin@baks.dev>
+ *  Copyright 2026.  Baks.dev <admin@baks.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -19,6 +19,7 @@
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
+ *
  */
 
 declare(strict_types=1);
@@ -29,6 +30,7 @@ use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Ozon\Entity\Event\Active\OzonTokenActive;
 use BaksDev\Ozon\Entity\Event\Card\OzonTokenCard;
 use BaksDev\Ozon\Entity\Event\Client\OzonTokenClient;
+use BaksDev\Ozon\Entity\Event\Commission\OzonTokenCommission;
 use BaksDev\Ozon\Entity\Event\Orders\OzonTokenOrders;
 use BaksDev\Ozon\Entity\Event\Percent\OzonTokenPercent;
 use BaksDev\Ozon\Entity\Event\Profile\OzonTokenProfile;
@@ -216,6 +218,14 @@ final class OzonTokenRepository implements OzonTokenInterface
             );
 
         $dbal
+            ->leftJoin(
+                'token',
+                OzonTokenCommission::class,
+                'commission',
+                'commission.event = token.event',
+            );
+
+        $dbal
             ->addSelect('profile.value AS profile')
             ->addSelect('token_value.value AS token')
             ->addSelect('type.value AS type')
@@ -226,8 +236,8 @@ final class OzonTokenRepository implements OzonTokenInterface
             ->addSelect('vat.value AS vat')
             ->addSelect('stocks.value AS stocks')
             ->addSelect('orders.value AS orders')
-            ->addSelect('sales.value AS sales');
-
+            ->addSelect('sales.value AS sales')
+            ->addSelect('commission.value AS commission');
 
         /* Кешируем результат ORM */
         return $dbal
