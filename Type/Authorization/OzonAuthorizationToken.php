@@ -49,12 +49,10 @@ final class OzonAuthorizationToken
         private ?bool $stocks = false, // остатки
         private ?bool $orders = false, // заказы
         private ?bool $sales = false, // продажи
-        private readonly ?bool $commission = false, // коммиссии ozon
+        private readonly ?bool $commission = true, // коммиссии ozon
     )
     {
-
         $this->profile = (string) $profile;
-
     }
 
     public function getProfile(): UserProfileUid
