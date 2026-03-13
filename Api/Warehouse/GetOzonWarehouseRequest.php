@@ -35,7 +35,7 @@ final class GetOzonWarehouseRequest extends Ozon
     /**
      * Список складов
      *
-     * @see https://docs.ozon.ru/api/seller/#operation/WarehouseAPI_WarehouseList
+     * @see https://docs.ozon.ru/api/seller/#operation/WarehouseListV2
      *
      */
     public function findAll(): array|false
