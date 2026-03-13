@@ -24,8 +24,7 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\Entity\Event\Client;
-
+namespace BaksDev\Ozon\Entity\Event\Commission;
 
 use BaksDev\Core\Entity\EntityEvent;
 use BaksDev\Ozon\Entity\Event\OzonTokenEvent;
@@ -35,24 +34,23 @@ use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Идентификатор клиента на маркетплейсе
+ * Применять ли к продуктам комиссии и тарифы Ozon
  */
 #[ORM\Entity]
-#[ORM\Table(name: 'ozon_token_client')]
-class OzonTokenClient extends EntityEvent
+#[ORM\Table(name: 'ozon_token_commission')]
+#[ORM\Index(columns: ['value'])]
+class OzonTokenCommission extends EntityEvent
 {
     /** ID события */
     #[Assert\NotBlank]
     #[Assert\Uuid]
     #[ORM\Id]
-    #[ORM\OneToOne(targetEntity: OzonTokenEvent::class, inversedBy: 'client')]
+    #[ORM\OneToOne(targetEntity: OzonTokenEvent::class, inversedBy: 'commission')]
     #[ORM\JoinColumn(name: 'event', referencedColumnName: 'id')]
     private OzonTokenEvent $event;
 
-    #[Assert\NotBlank]
-    #[ORM\Column(type: Types::STRING)]
-    private string $value;
-
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    private bool $value = true;
 
     public function __construct(OzonTokenEvent $event)
     {
@@ -64,14 +62,9 @@ class OzonTokenClient extends EntityEvent
         return (string) $this->event;
     }
 
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
     public function getDto($dto): mixed
     {
-        if($dto instanceof OzonTokenClientInterface)
+        if($dto instanceof OzonTokenCommissionInterface)
         {
             return parent::getDto($dto);
         }
@@ -81,7 +74,7 @@ class OzonTokenClient extends EntityEvent
 
     public function setEntity($dto): mixed
     {
-        if($dto instanceof OzonTokenClientInterface)
+        if($dto instanceof OzonTokenCommissionInterface)
         {
             return parent::setEntity($dto);
         }

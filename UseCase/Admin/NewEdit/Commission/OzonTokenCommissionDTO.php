@@ -24,39 +24,31 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\UseCase\Admin\NewEdit;
+namespace BaksDev\Ozon\UseCase\Admin\NewEdit\Commission;
 
-use BaksDev\Core\Entity\AbstractHandler;
-use BaksDev\Ozon\Entity\Event\OzonTokenEvent;
-use BaksDev\Ozon\Entity\OzonToken;
-use BaksDev\Ozon\Messenger\OzonTokenMessage;
+use BaksDev\Ozon\Entity\Event\Commission\OzonTokenCommissionInterface;
 
-final class OzonTokenHandler extends AbstractHandler
+/**
+ * @see OzonTokenCommission
+ */
+final class OzonTokenCommissionDTO implements OzonTokenCommissionInterface
 {
-    /** @see Ozon */
-    public function handle(OzonTokenDTO $command): string|OzonToken
+    private bool $value = true;
+
+    /**
+     * Value
+     */
+    public function getValue(): bool
     {
+        dump($this->value);
+        return $this->value;
+    }
 
-        $this
-            ->setCommand($command)
-            ->preEventPersistOrUpdate(OzonToken::class, OzonTokenEvent::class);
+    public function setValue(bool $value): self
+    {
+        $this->value = $value;
+        dump($this->value);
 
-        /** Валидация всех объектов */
-        if($this->validatorCollection->isInvalid())
-        {
-            return $this->validatorCollection->getErrorUniqid();
-        }
-
-        $this->flush();
-
-        /* Отправляем сообщение в шину */
-        $this->messageDispatch
-            ->addClearCacheOther('ozon')
-            ->dispatch(
-                message: new OzonTokenMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-                transport: 'ozon-products',
-            );
-
-        return $this->main;
+        return $this;
     }
 }

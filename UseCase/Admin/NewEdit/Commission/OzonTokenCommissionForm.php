@@ -24,39 +24,26 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\Ozon\UseCase\Admin\NewEdit;
+namespace BaksDev\Ozon\UseCase\Admin\NewEdit\Commission;
 
-use BaksDev\Core\Entity\AbstractHandler;
-use BaksDev\Ozon\Entity\Event\OzonTokenEvent;
-use BaksDev\Ozon\Entity\OzonToken;
-use BaksDev\Ozon\Messenger\OzonTokenMessage;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class OzonTokenHandler extends AbstractHandler
+final class OzonTokenCommissionForm extends AbstractType
 {
-    /** @see Ozon */
-    public function handle(OzonTokenDTO $command): string|OzonToken
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder->add('value', CheckboxType::class, ['required' => false]);
+    }
 
-        $this
-            ->setCommand($command)
-            ->preEventPersistOrUpdate(OzonToken::class, OzonTokenEvent::class);
-
-        /** Валидация всех объектов */
-        if($this->validatorCollection->isInvalid())
-        {
-            return $this->validatorCollection->getErrorUniqid();
-        }
-
-        $this->flush();
-
-        /* Отправляем сообщение в шину */
-        $this->messageDispatch
-            ->addClearCacheOther('ozon')
-            ->dispatch(
-                message: new OzonTokenMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-                transport: 'ozon-products',
-            );
-
-        return $this->main;
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => OzonTokenCommissionDTO::class,
+            'method' => 'POST',
+            'attr' => ['class' => 'w-100'],
+        ]);
     }
 }
