@@ -87,7 +87,7 @@ class AllOzonTokenRepositoryTest extends KernelTestCase
                 {
                     // Вызываем метод
                     $data = $method->invoke($AllOzonTokenResult);
-                    dump($data);
+                    //dump($data);
                 }
             }
 

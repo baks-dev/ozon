@@ -215,9 +215,9 @@ class OzonTokenEvent extends EntityEvent
         return (string) $this->id;
     }
 
-    public function getId(): OzonTokenEventUid
+    public function getMain(): ?OzonTokenUid
     {
-        return $this->id;
+        return $this->main;
     }
 
     /**
@@ -228,9 +228,9 @@ class OzonTokenEvent extends EntityEvent
         $this->main = $main instanceof OzonToken ? $main->getId() : $main;
     }
 
-    public function getMain(): ?OzonTokenUid
+    public function getId(): OzonTokenEventUid
     {
-        return $this->main;
+        return $this->id;
     }
 
     public function getDto($dto): mixed

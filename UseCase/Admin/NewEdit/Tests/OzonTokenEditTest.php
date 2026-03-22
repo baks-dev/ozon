@@ -86,8 +86,6 @@ class OzonTokenEditTest extends KernelTestCase
         $OzonTokenDTO->getStocks()->setValue(false);
 
 
-
-
         /** @var OzonTokenHandler $OzonTokenHandler */
         $OzonTokenHandler = self::getContainer()->get(OzonTokenHandler::class);
         $handle = $OzonTokenHandler->handle($OzonTokenDTO);

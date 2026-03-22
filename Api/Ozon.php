@@ -62,49 +62,6 @@ abstract class Ozon
         private readonly AppCacheInterface $cache,
     ) {}
 
-
-    public function forTokenIdentifier(OzonToken|OzonTokenUid|UserProfileUid $identifier): self
-    {
-        /**
-         * Если передан идентификатор профиля пользователя UserProfileUid -
-         * получаем один идентификатор профиля с флагом Card = true
-         */
-        if($identifier instanceof UserProfileUid)
-        {
-            $tokensByProfile = $this->OzonTokensByProfile
-                ->forProfile($identifier)
-                ->onlyCardUpdate()
-                ->findAll();
-
-            if(false !== $tokensByProfile && false !== $tokensByProfile->valid())
-            {
-                /** @var OzonTokenUid $identifier */
-                $identifier = $tokensByProfile->current();
-            }
-        }
-
-        if($identifier instanceof OzonToken)
-        {
-            $identifier = $identifier->getId();
-        }
-
-        if(false === ($identifier instanceof OzonTokenUid))
-        {
-            $this->profile = false;
-            $this->identifier = false;
-            return $this;
-        }
-
-        $this->AuthorizationToken = $this->OzonToken
-            ->forTokenIdentifier($identifier)
-            ->find();
-
-        $this->identifier = $identifier;
-
-        return $this;
-    }
-
-
     public function TokenHttpClient(OzonAuthorizationToken|false $AuthorizationToken = false): RetryableHttpClient
     {
         /**
@@ -156,7 +113,6 @@ abstract class Ozon
         );
     }
 
-
     protected function getProfile(): UserProfileUid|false
     {
         if(false === ($this->AuthorizationToken instanceof OzonAuthorizationToken))
@@ -167,14 +123,45 @@ abstract class Ozon
         return $this->AuthorizationToken->getProfile();
     }
 
-    public function getIdentifier(): false|OzonTokenUid
+    public function forTokenIdentifier(OzonToken|OzonTokenUid|UserProfileUid $identifier): self
     {
-        return $this->identifier;
-    }
+        /**
+         * Если передан идентификатор профиля пользователя UserProfileUid -
+         * получаем один идентификатор профиля с флагом Card = true
+         */
+        if($identifier instanceof UserProfileUid)
+        {
+            $tokensByProfile = $this->OzonTokensByProfile
+                ->forProfile($identifier)
+                ->onlyCardUpdate()
+                ->findAll();
 
-    protected function getToken(): string
-    {
-        return $this->AuthorizationToken->getToken();
+            if(false !== $tokensByProfile && false !== $tokensByProfile->valid())
+            {
+                /** @var OzonTokenUid $identifier */
+                $identifier = $tokensByProfile->current();
+            }
+        }
+
+        if($identifier instanceof OzonToken)
+        {
+            $identifier = $identifier->getId();
+        }
+
+        if(false === ($identifier instanceof OzonTokenUid))
+        {
+            $this->profile = false;
+            $this->identifier = false;
+            return $this;
+        }
+
+        $this->AuthorizationToken = $this->OzonToken
+            ->forTokenIdentifier($identifier)
+            ->find();
+
+        $this->identifier = $identifier;
+
+        return $this;
     }
 
     protected function getClient(): string
@@ -182,31 +169,20 @@ abstract class Ozon
         return $this->AuthorizationToken->getClient();
     }
 
-    protected function getWarehouse(): string
+    protected function getToken(): string
     {
-        return $this->AuthorizationToken->getWarehouse();
+        return $this->AuthorizationToken->getToken();
     }
 
-    protected function getPercent(): string
+    public function getIdentifier(): false|OzonTokenUid
     {
-        return $this->AuthorizationToken->getPercent();
-    }
-
-    protected function getType(): TypeProfileUid
-    {
-        return $this->AuthorizationToken->getType();
-    }
-
-    protected function getVat(): string|false
-    {
-        return $this->AuthorizationToken->getVat();
+        return $this->identifier;
     }
 
     public function getCacheInit(string $namespace): CacheInterface
     {
         return $this->cache->init($namespace);
     }
-
 
     public function isCard(): bool
     {
@@ -241,6 +217,26 @@ abstract class Ozon
         return
             ($this->AuthorizationToken instanceof OzonAuthorizationToken)
             && $this->AuthorizationToken->withCommission() === true;
+    }
+
+    protected function getWarehouse(): string
+    {
+        return $this->AuthorizationToken->getWarehouse();
+    }
+
+    protected function getPercent(): string
+    {
+        return $this->AuthorizationToken->getPercent();
+    }
+
+    protected function getType(): TypeProfileUid
+    {
+        return $this->AuthorizationToken->getType();
+    }
+
+    protected function getVat(): string|false
+    {
+        return $this->AuthorizationToken->getVat();
     }
 
     /**

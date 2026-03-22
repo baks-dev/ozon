@@ -29,7 +29,7 @@ final class OzonTokenDeleteHandler extends AbstractHandler
         /* Отправляем сообщение в шину */
         $this->messageDispatch->dispatch(
             message: new OzonTokenMessage($this->main->getId(), $this->main->getEvent(), $command->getEvent()),
-            transport: 'ozon'
+            transport: 'ozon',
         );
 
         return $this->main;

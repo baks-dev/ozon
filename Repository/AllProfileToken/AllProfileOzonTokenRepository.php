@@ -87,7 +87,7 @@ final class AllProfileOzonTokenRepository implements AllProfileOzonTokenInterfac
             ->setParameter(
                 'status',
                 UserProfileStatusActive::class,
-                UserProfileStatus::TYPE
+                UserProfileStatus::TYPE,
             );
 
         $dbal->join(

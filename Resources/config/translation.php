@@ -26,7 +26,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use BaksDev\Ozon\BaksDevOzonBundle;
 use Symfony\Config\FrameworkConfig;
 
-return static function (FrameworkConfig $config) {
+return static function(FrameworkConfig $config) {
 
     $config
         ->translator()

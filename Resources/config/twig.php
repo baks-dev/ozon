@@ -26,11 +26,11 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use BaksDev\Ozon\BaksDevOzonBundle;
 use Symfony\Config\TwigConfig;
 
-return static function (TwigConfig $twig) {
+return static function(TwigConfig $twig) {
 
     $twig->path(
         BaksDevOzonBundle::PATH.implode(DIRECTORY_SEPARATOR, ['Resources', 'view', '']),
-        'ozon'
+        'ozon',
     );
 
 };

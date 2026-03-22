@@ -40,15 +40,12 @@ final class OzonTokenCommissionDTO implements OzonTokenCommissionInterface
      */
     public function getValue(): bool
     {
-        dump($this->value);
         return $this->value;
     }
 
     public function setValue(bool $value): self
     {
         $this->value = $value;
-        dump($this->value);
-
         return $this;
     }
 }

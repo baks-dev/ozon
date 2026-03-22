@@ -245,14 +245,14 @@ final class OzonTokenRepository implements OzonTokenInterface
             ->fetchHydrate(OzonAuthorizationToken::class);
     }
 
+    public function getAuthorization(): false|OzonAuthorizationToken
+    {
+        return $this->authorization;
+    }
+
     public function setAuthorization(OzonAuthorizationToken $authorization): self
     {
         $this->authorization = $authorization;
         return $this;
-    }
-
-    public function getAuthorization(): false|OzonAuthorizationToken
-    {
-        return $this->authorization;
     }
 }

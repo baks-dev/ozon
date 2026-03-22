@@ -48,14 +48,6 @@ class OzonToken
     }
 
     /**
-     * Идентификатор
-     */
-    public function getId(): OzonTokenUid
-    {
-        return $this->id;
-    }
-
-    /**
      * Идентификатор события
      */
     public function getEvent(): OzonTokenEventUid
@@ -66,5 +58,13 @@ class OzonToken
     public function setEvent(OzonTokenEventUid|OzonTokenEvent $event): void
     {
         $this->event = $event instanceof OzonTokenEvent ? $event->getId() : $event;
+    }
+
+    /**
+     * Идентификатор
+     */
+    public function getId(): OzonTokenUid
+    {
+        return $this->id;
     }
 }

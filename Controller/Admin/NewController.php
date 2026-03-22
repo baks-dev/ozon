@@ -48,7 +48,7 @@ final class NewController extends AbstractController
                 'page.new',
                 $handle instanceof OzonToken ? 'success.new' : 'danger.new',
                 'ozon.admin',
-                $handle
+                $handle,
             );
 
             return $handle instanceof OzonToken ? $this->redirectToRoute('ozon:admin.index') : $this->redirectToReferer();

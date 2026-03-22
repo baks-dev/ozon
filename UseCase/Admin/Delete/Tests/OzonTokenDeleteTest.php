@@ -45,6 +45,11 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 class OzonTokenDeleteTest extends KernelTestCase
 {
+    public static function tearDownAfterClass(): void
+    {
+        OzonTokenNewTest::setUpBeforeClass();
+    }
+
     #[DependsOnClass(OzonTokenNewTest::class)]
     #[DependsOnClass(OzonTokenEditTest::class)]
     public function testUseCase(): void
@@ -79,10 +84,5 @@ class OzonTokenDeleteTest extends KernelTestCase
 
         self::assertTrue(($handle instanceof OzonToken), $handle.': Ошибка OzonToken');
 
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        OzonTokenNewTest::setUpBeforeClass();
     }
 }

@@ -15,8 +15,8 @@ use BaksDev\Ozon\UseCase\Admin\Delete\OzonTokenDeleteHandler;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 #[RoleSecurity('ROLE_OZON_DELETE')]
@@ -27,7 +27,8 @@ final class DeleteController extends AbstractController
         Request $request,
         #[MapEntity] OzonTokenEvent $ozonEvent,
         OzonTokenDeleteHandler $ozonDeleteHandler,
-    ): Response {
+    ): Response
+    {
 
         $ozonDeleteDTO = new OzonTokenDeleteDTO();
         $ozonEvent->getDto($ozonDeleteDTO);
@@ -36,7 +37,7 @@ final class DeleteController extends AbstractController
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && $form->has('ozon_token_delete'))
+        if($form->isSubmitted() && $form->isValid() && $form->has('ozon_token_delete'))
         {
             $handle = $ozonDeleteHandler->handle($ozonDeleteDTO);
 
@@ -44,14 +45,14 @@ final class DeleteController extends AbstractController
                 'page.delete',
                 $handle instanceof OzonToken ? 'success.delete' : 'danger.delete',
                 'ozon.admin',
-                $handle
+                $handle,
             );
 
             return $handle instanceof OzonToken ? $this->redirectToRoute('ozon:admin.index') : $this->redirectToReferer();
         }
 
         return $this->render([
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

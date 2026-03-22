@@ -32,7 +32,7 @@ use BaksDev\Ozon\Type\Warehouse\OzonTokenWarehouseType;
 use BaksDev\Ozon\Type\Warehouse\OzonTokenWarehouseUid;
 use Symfony\Config\DoctrineConfig;
 
-return static function (DoctrineConfig $doctrine, ContainerConfigurator $configurator): void {
+return static function(DoctrineConfig $doctrine, ContainerConfigurator $configurator): void {
 
 
     $doctrine->dbal()->type(OzonTokenUid::TYPE)->class(OzonTokenType::class);

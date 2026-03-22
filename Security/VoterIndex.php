@@ -16,7 +16,7 @@ final class VoterIndex implements VoterInterface
     /** Метод возвращает правило, конкатенируя ROLE + VOTER */
     public static function getVoter(): string
     {
-        return Role::ROLE . '_' . self::VOTER;
+        return Role::ROLE.'_'.self::VOTER;
     }
 
     public function equals(RoleInterface $role): bool
