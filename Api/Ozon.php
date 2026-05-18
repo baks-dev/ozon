@@ -84,6 +84,11 @@ abstract class Ozon
         {
             if(false === ($this->identifier instanceof OzonTokenUid))
             {
+                $this->logger->critical(
+                    'Не указан идентификатор токена профиля пользователя через вызов метода forIdentifier: ->forIdentifier($OzonTokenUid)',
+                    [self::class.':'.__LINE__],
+                );
+
                 throw new InvalidArgumentException(
                     'Не указан идентификатор токена профиля пользователя через вызов метода forIdentifier: ->forIdentifier($OzonTokenUid)',
                 );
@@ -246,6 +251,18 @@ abstract class Ozon
      */
     protected function isExecuteEnvironment(): bool
     {
+        if(false === ($this->identifier instanceof OzonTokenUid))
+        {
+            $this->logger->critical(
+                'Не указан идентификатор токена профиля пользователя через вызов метода forIdentifier: ->forIdentifier($OzonTokenUid)',
+                [self::class.':'.__LINE__],
+            );
+
+            throw new InvalidArgumentException(
+                'Не указан идентификатор токена профиля пользователя через вызов метода forIdentifier: ->forIdentifier($OzonTokenUid)',
+            );
+        }
+
         return $this->environment === 'prod';
     }
 }
